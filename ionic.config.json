@@ -1,0 +1,8 @@
+{
+  "name": "KSAppOficial",
+  "app_id": "96d0e959",
+  "type": "ionic-angular",
+  "integrations": {
+    "cordova": {}
+  }
+}
