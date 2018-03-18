@@ -1,17 +1,39 @@
 <ion-header>
   <ion-navbar>
-    <ion-title>Home</ion-title>
+    <ion-title>Calculadora Solar</ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
-  <h2>Welcome to Ionic!</h2>
-  <p>
-    This starter project comes with simple tabs-based layout for apps
-    that are going to primarily use a Tabbed UI.
-  </p>
-  <p>
-    Take a look at the <code>src/pages/</code> directory to add or change tabs,
-    update any existing page or create new pages.
-  </p>
+
+  <ion-list>
+
+    <ion-item>
+      <ion-label floating>Média KWh/mês</ion-label>
+      <ion-input type="number" maxlength="10" #mediaKw></ion-input>
+    </ion-item>
+  
+    <ion-item>
+      <ion-label floating>Valor tarifa</ion-label>
+      <ion-input type="number" maxlength="10" #valorTarifa></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label floating>Valor tarifa excedente</ion-label>
+      <ion-input type="number" maxlength="10" #valorTarifaExcedente></ion-input>
+    </ion-item>
+<br>
+    <ion-item>
+      <ion-label>Tipo da rede</ion-label>
+      <ion-select [(ngModel)]="tipoRede" cancelText="Cancelar" okText="OK">
+        <ion-option value="monofasico">Monofasico</ion-option>
+        <ion-option value="trifasico">Trifasico</ion-option>
+        <ion-option value="bifasico">Bifasico</ion-option>
+      </ion-select>
+    </ion-item>
+<br>
+<button ion-button block (click)="Calcula(mediaKw.value, valorTarifa.value, valorTarifaExcedente.value, tipoRede)">Calcular</button>
+
+
+</ion-list>
 </ion-content>
