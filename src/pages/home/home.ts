@@ -7,8 +7,6 @@ import { NavController, AlertController } from 'ionic-angular';
 })
 export class HomePage {
 
-  
-
   constructor(public navCtrl: NavController, public alertCtrl: AlertController) {
     
   }
@@ -75,11 +73,15 @@ export class HomePage {
 		} 
      */
 		
+    let result = `Sistema solar Ideal: ${sistemaSolarIdeal}
+                 <br> Sistema Solar Comercial: ${sistemaSolarComercial} 
+                 <br> Número de Paineis: ${numeroPaineis}
+                 <br> Area Necessária: ${areaNecessaria}m
+                 <br> Total geral tarifa: ${Math.round(totalGeralTarifa)},00
+                 <br> Valor Taxa Mínima: R$ ${Math.round(valorTaxaMinima)},00
+                 <br> Investimento Aproximado: R$ ${Math.round(investimentoAproximado)},00`;
 
-    console.log(`Sistema solar Ideal: ${sistemaSolarIdeal}`);
-    console.log(`Número de paineis: ${numeroPaineis}`);
-
-
+    this.showAlert("Resultado", result);
 
 
   }
@@ -151,7 +153,6 @@ export class HomePage {
     return valorWatt;
   }
 
-
   showAlert(title, subTitle) {
     let alert = this.alertCtrl.create({
       title: title,
@@ -161,3 +162,4 @@ export class HomePage {
     alert.present();
   }
 }
+
