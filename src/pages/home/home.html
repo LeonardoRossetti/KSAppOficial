@@ -9,15 +9,29 @@
   <ion-list>
 
     <ion-item>
-      <ion-label floating>Média KWh/mês</ion-label>
-      <ion-input type="number" maxlength="10" #mediaKw></ion-input>
-    </ion-item>
-  
-    <ion-item>
-      <ion-label floating>Valor tarifa</ion-label>
-      <ion-input type="number" maxlength="10" #valorTarifa></ion-input>
+        <ion-label>Estados</ion-label>
+        <ion-select [(ngModel)]="estados" cancelText="Cancelar" okText="OK">
+          <ion-option value="1">Santa Catarina</ion-option>
+          <ion-option value="2">Paraná</ion-option>
+          <ion-option value="3">Rio Grande do Sul</ion-option>
+        </ion-select>
     </ion-item>
 
+    <ion-icon style="float:right; margin-top:10px;" ios="ios-information-circle" md="md-information-circle" (click)="ajudaMediaKw()"></ion-icon>
+    <ion-item>
+      <ion-label floating>Média KWh/mês</ion-label>
+      <ion-input type="number" maxlength="10" #mediaKw>
+      </ion-input>
+    </ion-item>
+  
+    <ion-icon style="float:right; margin-top:10px;" ios="ios-information-circle" md="md-information-circle" (click)="ajudaValorTarifa()"></ion-icon>
+    <ion-item>
+      <ion-label floating>Valor tarifa</ion-label>
+      <ion-input type="number" maxlength="10" value="0.00" #valorTarifa></ion-input>
+    </ion-item>
+
+    <!-- <ion-icon float-right ios="ios-information-circle" md="md-information-circle" (click)="ajudaValorTarifaExcedente()"></ion-icon> -->
+    <ion-icon style="float:right; margin-top:10px;" ios="ios-information-circle" md="md-information-circle" (click)="ajudaValorTarifaExcedente()"></ion-icon>
     <ion-item>
       <ion-label floating>Valor tarifa excedente</ion-label>
       <ion-input type="number" maxlength="10" #valorTarifaExcedente></ion-input>

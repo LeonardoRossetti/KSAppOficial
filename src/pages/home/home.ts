@@ -1,5 +1,6 @@
+import { InfoComponent } from './../../components/info/info';
 import { Component } from '@angular/core';
-import { NavController, AlertController } from 'ionic-angular';
+import { NavController, AlertController, ModalController } from 'ionic-angular';
 
 @Component({
   selector: 'page-home',
@@ -7,10 +8,54 @@ import { NavController, AlertController } from 'ionic-angular';
 })
 export class HomePage {
 
-  constructor(public navCtrl: NavController, public alertCtrl: AlertController) {
-    
+  constructor(public navCtrl: NavController, 
+              public alertCtrl: AlertController,
+              public modalCtrl: ModalController) { }
+
+  ionViewDidEnter(): void{
+    console.log("executou!!!");
+
+/**
+ * HELP
+ * 
+ * Média KW:
+ * Informe neste campo a média de consumo dos últimos 12 meses. Esta informação pode ser
+ * verificada na sua fatura de energia.
+ * 
+ * Valor tarifa: 
+ * Informe o valor da tarifa de energia em kwh. Esta informação pode ser
+ * verificada na sua fatura de energia.
+ * 
+ * Valor tarifa excedente:
+ * Algumas concencionárias de energia elétrica do Brasil trabalham com diferentes tarifas. 
+ * Verifique na sua fatura se a concencionária da sua região possui mais de uma tarifa. 
+ */
+
+
+  }
+  
+  /** Abre o modal */
+  presentProfileModal(title, img, text) {
+    let profileModal = this.modalCtrl.create(InfoComponent, { title: title, text: text, img: img });
+    profileModal.onDidDismiss(data => {
+      console.log(data);
+    });
+    profileModal.present();
   }
 
+  ajudaMediaKw(): void {
+    this.presentProfileModal("Informação: Média KWh", "paisagem.jpg", "Informe neste campo a média de consumo dos últimos 12 meses. Esta informação pode ser verificada na sua fatura de energia");
+  }
+
+  ajudaValorTarifa(): void {
+    this.presentProfileModal("Informação: Valor tarifa", "paisagem.jpg", "Informe o valor da tarifa de energia em kwh. Esta informação pode ser verificada na sua fatura de energia.");
+  }
+
+  ajudaValorTarifaExcedente(): void {
+    this.presentProfileModal("Informação: Valor tarifa excedente", "paisagem.jpg", "Algumas concencionárias de energia elétrica do Brasil trabalham com diferentes tarifas. Verifique na sua fatura se a concencionária da sua região possui mais de uma tarifa.");
+  }
+
+  
   Calcula(mediaKw, valorTarifa, valorTarifaExcedente, tipoRede):void {
     let sistemaSolarIdeal = 0;
 	  let radiacaoCidade = 4.42;
@@ -30,7 +75,8 @@ export class HomePage {
     }
 
     /**
-     * TODO: explicar o que significa esse cálculo
+     * 30: dias do mes
+     * 0.77: média de perda de eficiencia do painel
      */
     sistemaSolarIdeal = (mediaKw - tipoRedeValor) / 30 / radiacaoCidade / 0.77;
 
@@ -72,18 +118,16 @@ export class HomePage {
 			invest = invest - mediaFaturaMesComInflacao;
 		} 
      */
-		
+
     let result = `Sistema solar Ideal: ${sistemaSolarIdeal}
                  <br> Sistema Solar Comercial: ${sistemaSolarComercial} 
                  <br> Número de Paineis: ${numeroPaineis}
-                 <br> Area Necessária: ${areaNecessaria}m
+                 <br> Area Necessária: ${areaNecessaria}m²
                  <br> Total geral tarifa: ${Math.round(totalGeralTarifa)},00
                  <br> Valor Taxa Mínima: R$ ${Math.round(valorTaxaMinima)},00
                  <br> Investimento Aproximado: R$ ${Math.round(investimentoAproximado)},00`;
 
     this.showAlert("Resultado", result);
-
-
   }
 
   /**
@@ -114,14 +158,14 @@ export class HomePage {
    */
   calculaNumeroPaineis(sistemaSolarIdeal: number, potenciaPainel: number): number{
     let numeroPaineis = sistemaSolarIdeal / (potenciaPainel / 1000);
-    console.log(`Número de paineis: ${numeroPaineis}`); //Remover
-
     let decimalNumeroPaineis = numeroPaineis - Math.floor(numeroPaineis);
+
     if (decimalNumeroPaineis > 0.2) {
       numeroPaineis = Math.ceil(numeroPaineis);
     } else {
       numeroPaineis = Math.floor(numeroPaineis);
     }
+
     return numeroPaineis;
   }
 
