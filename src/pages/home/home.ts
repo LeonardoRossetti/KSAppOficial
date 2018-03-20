@@ -44,15 +44,15 @@ export class HomePage {
   }
 
   ajudaMediaKw(): void {
-    this.presentProfileModal("Informação: Média KWh", "paisagem.jpg", "Informe neste campo a média de consumo dos últimos 12 meses. Esta informação pode ser verificada na sua fatura de energia");
+    this.presentProfileModal("Informação: Média KWh", "sc/Celesc_Consumo_medio.jpg", "Informe neste campo a média de consumo dos últimos 12 meses. Esta informação pode ser verificada na sua fatura de energia. Conforme destacado em vermelho na imagem abaixo:");
   }
 
   ajudaValorTarifa(): void {
-    this.presentProfileModal("Informação: Valor tarifa", "paisagem.jpg", "Informe o valor da tarifa de energia em kwh. Esta informação pode ser verificada na sua fatura de energia.");
+    this.presentProfileModal("Informação: Valor tarifa", "sc/Celesc_tarifa.jpg", "Informe o valor da tarifa de energia em kwh. Esta informação pode ser verificada na sua fatura de energia. Conforme destacado em vermelho na imagem abaixo:");
   }
 
   ajudaValorTarifaExcedente(): void {
-    this.presentProfileModal("Informação: Valor tarifa excedente", "paisagem.jpg", "Algumas concencionárias de energia elétrica do Brasil trabalham com diferentes tarifas. Verifique na sua fatura se a concencionária da sua região possui mais de uma tarifa.");
+    this.presentProfileModal("Informação: Valor tarifa excedente", "sc/Celesc_tarifa_excedente.jpg", "Algumas concencionárias de energia elétrica do Brasil trabalham com diferentes tarifas. Verifique na sua fatura se a concencionária da sua região possui mais de uma tarifa. Conforme destacado em vermelho na imagem abaixo:");
   }
 
   
@@ -119,14 +119,14 @@ export class HomePage {
 		} 
      */
 
-    let result = `Sistema solar Ideal: ${sistemaSolarIdeal}
+
+
+    let result = `
                  <br> Sistema Solar Comercial: ${sistemaSolarComercial} 
                  <br> Número de Paineis: ${numeroPaineis}
                  <br> Area Necessária: ${areaNecessaria}m²
-                 <br> Total geral tarifa: ${Math.round(totalGeralTarifa)},00
-                 <br> Valor Taxa Mínima: R$ ${Math.round(valorTaxaMinima)},00
                  <br> Investimento Aproximado: R$ ${Math.round(investimentoAproximado)},00`;
-
+//exibir tambem o retorno do investimento, ex.: 6 anos e dois meses.
     this.showAlert("Resultado", result);
   }
 
