@@ -1,4 +1,5 @@
 import { InfoComponent } from './../../components/info/info';
+import { ResultComponent } from './../../components/result/result';
 import { Component } from '@angular/core';
 import { NavController, AlertController, ModalController } from 'ionic-angular';
 
@@ -14,45 +15,43 @@ export class HomePage {
 
   ionViewDidEnter(): void{
     console.log("executou!!!");
-
-/**
- * HELP
- * 
- * Média KW:
- * Informe neste campo a média de consumo dos últimos 12 meses. Esta informação pode ser
- * verificada na sua fatura de energia.
- * 
- * Valor tarifa: 
- * Informe o valor da tarifa de energia em kwh. Esta informação pode ser
- * verificada na sua fatura de energia.
- * 
- * Valor tarifa excedente:
- * Algumas concencionárias de energia elétrica do Brasil trabalham com diferentes tarifas. 
- * Verifique na sua fatura se a concencionária da sua região possui mais de uma tarifa. 
- */
-
-
   }
   
-  /** Abre o modal */
-  presentProfileModal(title, img, text) {
-    let profileModal = this.modalCtrl.create(InfoComponent, { title: title, text: text, img: img });
-    profileModal.onDidDismiss(data => {
+  /** Abre o modal de informacao */
+  presentInfoModal(title, img, text) {
+    let infoModal = this.modalCtrl.create(InfoComponent, { title: title, text: text, img: img });
+    infoModal.onDidDismiss(data => {
       console.log(data);
     });
-    profileModal.present();
+    infoModal.present();
+  }
+
+  /** Abre o modal de resultado */
+  presentResultModal(title, sistemaSolarComercial, numeroPaineis, areaNecessaria, investimentoAproximado) {
+    let resultModal = this.modalCtrl.create(ResultComponent, 
+      { 
+        title: title, 
+        sistemaSolarComercial: sistemaSolarComercial, 
+        numeroPaineis: numeroPaineis,
+        areaNecessaria: areaNecessaria,
+        investimentoAproximado: investimentoAproximado
+       });
+       resultModal.onDidDismiss(data => {
+      console.log(data);
+    });
+    resultModal.present();
   }
 
   ajudaMediaKw(): void {
-    this.presentProfileModal("Informação: Média KWh", "sc/Celesc_Consumo_medio.jpg", "Informe neste campo a média de consumo dos últimos 12 meses. Esta informação pode ser verificada na sua fatura de energia. Conforme destacado em vermelho na imagem abaixo:");
+    this.presentInfoModal("Informação: Média KWh", "sc/Celesc_Consumo_medio.jpg", "Informe neste campo a média de consumo dos últimos 12 meses. Esta informação pode ser verificada na sua fatura de energia. Conforme destacado em vermelho na imagem abaixo:");
   }
 
   ajudaValorTarifa(): void {
-    this.presentProfileModal("Informação: Valor tarifa", "sc/Celesc_tarifa.jpg", "Informe o valor da tarifa de energia em kwh. Esta informação pode ser verificada na sua fatura de energia. Conforme destacado em vermelho na imagem abaixo:");
+    this.presentInfoModal("Informação: Valor tarifa", "sc/Celesc_tarifa.jpg", "Informe o valor da tarifa de energia em kwh. Esta informação pode ser verificada na sua fatura de energia. Conforme destacado em vermelho na imagem abaixo:");
   }
 
   ajudaValorTarifaExcedente(): void {
-    this.presentProfileModal("Informação: Valor tarifa excedente", "sc/Celesc_tarifa_excedente.jpg", "Algumas concencionárias de energia elétrica do Brasil trabalham com diferentes tarifas. Verifique na sua fatura se a concencionária da sua região possui mais de uma tarifa. Conforme destacado em vermelho na imagem abaixo:");
+    this.presentInfoModal("Informação: Valor tarifa excedente", "sc/Celesc_tarifa_excedente.jpg", "Algumas concencionárias de energia elétrica do Brasil trabalham com diferentes tarifas. Verifique na sua fatura se a concencionária da sua região possui mais de uma tarifa. Conforme destacado em vermelho na imagem abaixo:");
   }
 
   
@@ -119,15 +118,15 @@ export class HomePage {
 		} 
      */
 
+    this.presentResultModal("Resultado", sistemaSolarComercial, numeroPaineis, `${areaNecessaria}m²`, `${Math.round(investimentoAproximado)},00`);
+    //exibir tambem o retorno do investimento, ex.: 6 anos e dois meses.
 
-
-    let result = `
-                 <br> Sistema Solar Comercial: ${sistemaSolarComercial} 
-                 <br> Número de Paineis: ${numeroPaineis}
-                 <br> Area Necessária: ${areaNecessaria}m²
-                 <br> Investimento Aproximado: R$ ${Math.round(investimentoAproximado)},00`;
-//exibir tambem o retorno do investimento, ex.: 6 anos e dois meses.
-    this.showAlert("Resultado", result);
+    // let result = `
+    //              <br> Sistema Solar Comercial: ${sistemaSolarComercial} 
+    //              <br> Número de Paineis: ${numeroPaineis}
+    //              <br> Area Necessária: ${areaNecessaria}m²
+    //              <br> Investimento Aproximado: R$ ${Math.round(investimentoAproximado)},00`;
+    //this.showAlert("Resultado", result);
   }
 
   /**

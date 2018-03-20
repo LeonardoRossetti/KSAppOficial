@@ -11,6 +11,7 @@ import { TabsPage } from '../pages/tabs/tabs';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { InfoComponent } from '../components/info/info';
+import { ResultComponent } from '../components/result/result';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { InfoComponent } from '../components/info/info';
     ContactPage,
     HomePage,
     TabsPage,
-    InfoComponent
+    InfoComponent,
+    ResultComponent
   ],
   imports: [
     BrowserModule,
@@ -32,7 +34,8 @@ import { InfoComponent } from '../components/info/info';
     ContactPage,
     HomePage,
     TabsPage,
-    InfoComponent
+    InfoComponent,
+    ResultComponent
   ],
   providers: [
     StatusBar,
