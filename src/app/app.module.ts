@@ -2,6 +2,8 @@ import { NgModule, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
+import { InputMaskModule } from 'ionic-input-mask';
+import { Mask } from'./Mask';
 
 import { AboutPage } from '../pages/about/about';
 import { ContactPage } from '../pages/contact/contact';
@@ -21,10 +23,12 @@ import { ResultComponent } from '../components/result/result';
     HomePage,
     TabsPage,
     InfoComponent,
-    ResultComponent
+    ResultComponent,
+    Mask
   ],
   imports: [
     BrowserModule,
+    InputMaskModule,
     IonicModule.forRoot(MyApp)
   ],
   bootstrap: [IonicApp],

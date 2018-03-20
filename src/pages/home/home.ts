@@ -3,6 +3,9 @@ import { ResultComponent } from './../../components/result/result';
 import { Component } from '@angular/core';
 import { NavController, AlertController, ModalController } from 'ionic-angular';
 
+declare var jquery: any;
+declare var $: any;
+
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
@@ -11,10 +14,17 @@ export class HomePage {
 
   constructor(public navCtrl: NavController, 
               public alertCtrl: AlertController,
-              public modalCtrl: ModalController) { }
+              public modalCtrl: ModalController) { 
+                /*$('#dinheiroComZero').maskMoney({ decimal: ',', thousands: '.', precision: 2 });
+  $('#dinheiroSemZero').maskMoney({ decimal: ',', thousands: '.', precision: 0 });
+  $('#dinheiroVirgula').maskMoney({ decimal: '.', thousands: ',', precision: 2 });
+              */
+            }
 
   ionViewDidEnter(): void{
     console.log("executou!!!");
+    
+    $('#money').maskMoney({ decimal: ',', thousands: '.', precision: 2 });
   }
   
   /** Abre o modal de informacao */
