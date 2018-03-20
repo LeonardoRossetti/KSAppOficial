@@ -15,16 +15,12 @@ export class HomePage {
   constructor(public navCtrl: NavController, 
               public alertCtrl: AlertController,
               public modalCtrl: ModalController) { 
-                /*$('#dinheiroComZero').maskMoney({ decimal: ',', thousands: '.', precision: 2 });
-  $('#dinheiroSemZero').maskMoney({ decimal: ',', thousands: '.', precision: 0 });
-  $('#dinheiroVirgula').maskMoney({ decimal: '.', thousands: ',', precision: 2 });
-              */
             }
 
   ionViewDidEnter(): void{
     console.log("executou!!!");
     
-    $('#money').maskMoney({ decimal: ',', thousands: '.', precision: 2 });
+    //$('#money').maskMoney({ decimal: ',', thousands: '.', precision: 2 });
   }
   
   /** Abre o modal de informacao */
@@ -37,14 +33,15 @@ export class HomePage {
   }
 
   /** Abre o modal de resultado */
-  presentResultModal(title, sistemaSolarComercial, numeroPaineis, areaNecessaria, investimentoAproximado) {
+  presentResultModal(title, sistemaSolarComercial, numeroPaineis, areaNecessaria, investimentoAproximado, tempoInvestimento) {
     let resultModal = this.modalCtrl.create(ResultComponent, 
       { 
         title: title, 
         sistemaSolarComercial: sistemaSolarComercial, 
         numeroPaineis: numeroPaineis,
         areaNecessaria: areaNecessaria,
-        investimentoAproximado: investimentoAproximado
+        investimentoAproximado: investimentoAproximado,
+        tempoInvestimento: tempoInvestimento
        });
        resultModal.onDidDismiss(data => {
       console.log(data);
@@ -63,7 +60,6 @@ export class HomePage {
   ajudaValorTarifaExcedente(): void {
     this.presentInfoModal("Informação: Valor tarifa excedente", "sc/Celesc_tarifa_excedente.jpg", "Algumas concencionárias de energia elétrica do Brasil trabalham com diferentes tarifas. Verifique na sua fatura se a concencionária da sua região possui mais de uma tarifa. Conforme destacado em vermelho na imagem abaixo:");
   }
-
   
   Calcula(mediaKw, valorTarifa, valorTarifaExcedente, tipoRede):void {
     let sistemaSolarIdeal = 0;
@@ -112,31 +108,43 @@ export class HomePage {
       valorTaxaMinima = valorTarifa * monofasico; break;
     }
 
-    /**
-     * var invest = investimentoAproximado;
-		var result = "";
-		var mes = 0;
-		var mediaFaturaMesComInflacao = totalGeralTarifa - valorTaxaMinima;
+    let tempoInvestimento = this.calculaTempoMedioRetornoInvestimento(investimentoAproximado, totalGeralTarifa, valorTaxaMinima)
+
+    //Abre modal para exibir os resultados
+    this.presentResultModal("Resultado", sistemaSolarComercial, numeroPaineis, `${areaNecessaria}m²`, `${Math.round(investimentoAproximado)},00`, tempoInvestimento);
+  }
+
+  /**
+   * Calcula o valor médio do retorno do investimento
+   * @param investimentoAproximado 
+   * @param totalGeralTarifa 
+   * @param valorTaxaMinima 
+   */
+  calculaTempoMedioRetornoInvestimento(investimentoAproximado, totalGeralTarifa, valorTaxaMinima): string {
+    let invest = investimentoAproximado;
+		let result = "";
+		let mes = 0;
+		let mediaFaturaMesComInflacao = totalGeralTarifa - valorTaxaMinima;
 		while(invest > 0)
 		{	
 			if (mes >= 12){
 				mediaFaturaMesComInflacao = mediaFaturaMesComInflacao * 1.008334;
 			}
-			mes++;
-			result = result + "<br><br> Mes: " + mes + "  Investimento: " + Math.round10(invest, -2) + "  mediaFaturaMesComInflacao: " + Math.round10(mediaFaturaMesComInflacao, -2);  
+      mes++;
 			invest = invest - mediaFaturaMesComInflacao;
 		} 
-     */
+     
+    let tempoEmAnos = mes / 12;
+    let decimalTempoEmAnos = tempoEmAnos - Math.floor(tempoEmAnos);
+    let tempoInvestimento: string;
+    if (decimalTempoEmAnos > 1) { //pois pode ter numeros como 0.00005      
+      let textoTempoEmAnos = decimalTempoEmAnos.toString().substr(2,1);
+      tempoInvestimento = `${tempoEmAnos - decimalTempoEmAnos} anos e ${textoTempoEmAnos} mêses.`;
+    } else {
+      tempoInvestimento = `${tempoEmAnos - decimalTempoEmAnos} anos`;
+    }
 
-    this.presentResultModal("Resultado", sistemaSolarComercial, numeroPaineis, `${areaNecessaria}m²`, `${Math.round(investimentoAproximado)},00`);
-    //exibir tambem o retorno do investimento, ex.: 6 anos e dois meses.
-
-    // let result = `
-    //              <br> Sistema Solar Comercial: ${sistemaSolarComercial} 
-    //              <br> Número de Paineis: ${numeroPaineis}
-    //              <br> Area Necessária: ${areaNecessaria}m²
-    //              <br> Investimento Aproximado: R$ ${Math.round(investimentoAproximado)},00`;
-    //this.showAlert("Resultado", result);
+    return tempoInvestimento;
   }
 
   /**

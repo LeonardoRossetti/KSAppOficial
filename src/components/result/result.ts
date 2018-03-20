@@ -12,17 +12,18 @@ export class ResultComponent {
   numeroPaineis: string;
   areaNecessaria: string;
   investimentoAproximado: string;
+  tempoInvestimento: string;
 
   constructor(public viewCtrl: ViewController, public navParams: NavParams) {
     this.title = this.navParams.get("title");
     this.sistemaSolarComercial = this.navParams.get("sistemaSolarComercial");
     this.numeroPaineis = this.navParams.get("numeroPaineis");
     this.areaNecessaria = this.navParams.get("areaNecessaria");
-    this.investimentoAproximado = this.navParams.get("investimentoAproximado");
+    this.investimentoAproximado = `R$ ${this.navParams.get("investimentoAproximado")}`;
+    this.tempoInvestimento = this.navParams.get("tempoInvestimento");
   }
 
   voltar(): void {
     this.viewCtrl.dismiss();
   }
-
 }
