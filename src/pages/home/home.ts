@@ -1,10 +1,9 @@
-import { ServidorProvider } from './../../providers/servidor/servidor';
-//import { Observable } from 'rxjs/Observable';
 import { Component } from '@angular/core';
 import { NavController, AlertController, ModalController } from 'ionic-angular';
 
 import { InfoComponent } from './../../components/info/info';
 import { ResultComponent } from './../../components/result/result';
+import { ServidorProvider } from './../../providers/servidor/servidor';
 
 //declare var jquery: any;
 //declare var $: any;
@@ -15,9 +14,10 @@ import { ResultComponent } from './../../components/result/result';
 })
 export class HomePage {
 
-  constructor(public navCtrl: NavController, 
+  constructor(
     public alertCtrl: AlertController,
     public modalCtrl: ModalController,
+    public navCtrl: NavController, 
     public servidor: ServidorProvider
   ) { }
     

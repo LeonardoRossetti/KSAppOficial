@@ -1,32 +1,31 @@
-import { MoedaPipe } from './../pipes/moeda/moeda';
-import { HttpModule } from '@angular/http';
-import { NgModule, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
-import { MyApp } from './app.component';
+import { HttpClientModule } from '@angular/common/http';
+import { HttpModule } from '@angular/http';
+import { NgModule, ErrorHandler } from '@angular/core';
+import { StatusBar } from '@ionic-native/status-bar';
+import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { AboutPage } from '../pages/about/about';
 import { ContactPage } from '../pages/contact/contact';
 import { HomePage } from '../pages/home/home';
-import { TabsPage } from '../pages/tabs/tabs';
-
-import { StatusBar } from '@ionic-native/status-bar';
-import { SplashScreen } from '@ionic-native/splash-screen';
 import { InfoComponent } from '../components/info/info';
+import { MoedaPipe } from './../pipes/moeda/moeda';
+import { MyApp } from './app.component';
 import { ResultComponent } from '../components/result/result';
 import { ServidorProvider } from '../providers/servidor/servidor';
-import { HttpClientModule } from '@angular/common/http';
+import { TabsPage } from '../pages/tabs/tabs';
 
 @NgModule({
   declarations: [
-    MyApp,
     AboutPage,
     ContactPage,
     HomePage,
-    TabsPage,
     InfoComponent,
+    MoedaPipe,
+    MyApp,
     ResultComponent,
-    MoedaPipe
+    TabsPage
   ],
   imports: [
     BrowserModule,
@@ -36,19 +35,19 @@ import { HttpClientModule } from '@angular/common/http';
   ],
   bootstrap: [IonicApp],
   entryComponents: [
-    MyApp,
     AboutPage,
     ContactPage,
     HomePage,
-    TabsPage,
     InfoComponent,
-    ResultComponent
+    MyApp,
+    ResultComponent,
+    TabsPage
   ],
   providers: [
-    StatusBar,
-    SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    ServidorProvider
+    ServidorProvider,
+    SplashScreen,
+    StatusBar
   ]
 })
 export class AppModule {}
