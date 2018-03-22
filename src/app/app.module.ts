@@ -1,9 +1,8 @@
+import { HttpModule } from '@angular/http';
 import { NgModule, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { MyApp } from './app.component';
-import { InputMaskModule } from 'ionic-input-mask';
-import { Mask } from'./Mask';
 
 import { AboutPage } from '../pages/about/about';
 import { ContactPage } from '../pages/contact/contact';
@@ -14,6 +13,8 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { InfoComponent } from '../components/info/info';
 import { ResultComponent } from '../components/result/result';
+import { ServidorProvider } from '../providers/servidor/servidor';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -23,12 +24,12 @@ import { ResultComponent } from '../components/result/result';
     HomePage,
     TabsPage,
     InfoComponent,
-    ResultComponent,
-    Mask
+    ResultComponent
   ],
   imports: [
     BrowserModule,
-    InputMaskModule,
+    HttpModule,
+    HttpClientModule,
     IonicModule.forRoot(MyApp)
   ],
   bootstrap: [IonicApp],
@@ -44,7 +45,8 @@ import { ResultComponent } from '../components/result/result';
   providers: [
     StatusBar,
     SplashScreen,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    ServidorProvider
   ]
 })
 export class AppModule {}

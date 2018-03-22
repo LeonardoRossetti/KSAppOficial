@@ -1,7 +1,10 @@
-import { InfoComponent } from './../../components/info/info';
-import { ResultComponent } from './../../components/result/result';
+import { ServidorProvider } from './../../providers/servidor/servidor';
+//import { Observable } from 'rxjs/Observable';
 import { Component } from '@angular/core';
 import { NavController, AlertController, ModalController } from 'ionic-angular';
+
+import { InfoComponent } from './../../components/info/info';
+import { ResultComponent } from './../../components/result/result';
 
 //declare var jquery: any;
 //declare var $: any;
@@ -13,15 +16,35 @@ import { NavController, AlertController, ModalController } from 'ionic-angular';
 export class HomePage {
 
   constructor(public navCtrl: NavController, 
-              public alertCtrl: AlertController,
-              public modalCtrl: ModalController) { 
-            }
-
-  ionViewDidEnter(): void{
-    console.log("executou!!!");
+    public alertCtrl: AlertController,
+    public modalCtrl: ModalController,
+    public servidor: ServidorProvider
+  ) { }
     
-    //$('#money').maskMoney({ decimal: ',', thousands: '.', precision: 2 });
+  ionViewDidEnter(): void {
+    //let estados: {};
+    //let cidades: {};
+
+    console.log("executou!!!");
+
+    
+
+    // this.serverService.getTeste()
+    //   .subscribe(data => {
+    //     console.log(data);
+    //   });
+
+    this.carregaEstados();
   }
+
+  carregaEstados(): void{
+    let estados = this.servidor.getStates();
+    console.log(estados);
+  }
+
+  // carregaCidades(estado): void {
+  //   let cidades = this.serverService.getCities(estado);
+  // }
   
   /** Abre o modal de informacao */
   presentInfoModal(title, img, text) {

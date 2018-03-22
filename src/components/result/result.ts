@@ -21,6 +21,8 @@ export class ResultComponent {
     this.areaNecessaria = this.navParams.get("areaNecessaria");
     this.investimentoAproximado = `R$ ${this.navParams.get("investimentoAproximado")}`;
     this.tempoInvestimento = this.navParams.get("tempoInvestimento");
+
+
   }
 
   voltar(): void {
