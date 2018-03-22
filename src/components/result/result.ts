@@ -19,7 +19,7 @@ export class ResultComponent {
     this.sistemaSolarComercial = this.navParams.get("sistemaSolarComercial");
     this.numeroPaineis = this.navParams.get("numeroPaineis");
     this.areaNecessaria = this.navParams.get("areaNecessaria");
-    this.investimentoAproximado = `R$ ${this.navParams.get("investimentoAproximado")}`;
+    this.investimentoAproximado = `${this.navParams.get("investimentoAproximado")}`;
     this.tempoInvestimento = this.navParams.get("tempoInvestimento");
 
 

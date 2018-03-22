@@ -134,7 +134,7 @@ export class HomePage {
     let tempoInvestimento = this.calculaTempoMedioRetornoInvestimento(investimentoAproximado, totalGeralTarifa, valorTaxaMinima)
 
     //Abre modal para exibir os resultados
-    this.presentResultModal("Resultado", sistemaSolarComercial, numeroPaineis, `${areaNecessaria}m²`, `${Math.round(investimentoAproximado)},00`, tempoInvestimento);
+    this.presentResultModal("Resultado", sistemaSolarComercial, numeroPaineis, `${areaNecessaria}m²`, `${Math.round(investimentoAproximado)}`, tempoInvestimento);
   }
 
   /**

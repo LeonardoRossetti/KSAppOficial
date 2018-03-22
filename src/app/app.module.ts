@@ -1,3 +1,4 @@
+import { MoedaPipe } from './../pipes/moeda/moeda';
 import { HttpModule } from '@angular/http';
 import { NgModule, ErrorHandler } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
@@ -24,7 +25,8 @@ import { HttpClientModule } from '@angular/common/http';
     HomePage,
     TabsPage,
     InfoComponent,
-    ResultComponent
+    ResultComponent,
+    MoedaPipe
   ],
   imports: [
     BrowserModule,
