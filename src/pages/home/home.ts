@@ -3,8 +3,8 @@ import { ResultComponent } from './../../components/result/result';
 import { Component } from '@angular/core';
 import { NavController, AlertController, ModalController } from 'ionic-angular';
 
-declare var jquery: any;
-declare var $: any;
+//declare var jquery: any;
+//declare var $: any;
 
 @Component({
   selector: 'page-home',
@@ -122,7 +122,6 @@ export class HomePage {
    */
   calculaTempoMedioRetornoInvestimento(investimentoAproximado, totalGeralTarifa, valorTaxaMinima): string {
     let invest = investimentoAproximado;
-		let result = "";
 		let mes = 0;
 		let mediaFaturaMesComInflacao = totalGeralTarifa - valorTaxaMinima;
 		while(invest > 0)
