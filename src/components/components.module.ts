@@ -1,7 +1,8 @@
 import { NgModule } from '@angular/core';
 import { InfoComponent } from './info/info';
 import { ResultComponent } from './result/result';
-import { CustomHeaderComponent } from './custom-header/custom-header';
+import { CustomHeaderComponent } from './custom-header/custom-header.component';
+
 @NgModule({
 	declarations: [InfoComponent,
     ResultComponent,
