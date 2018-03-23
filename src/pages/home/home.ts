@@ -73,15 +73,15 @@ export class HomePage {
   }
 
   ajudaMediaKw(): void {
-    this.presentInfoModal("Informação: Média KWh", "sc/Celesc_Consumo_medio.jpg", "Informe neste campo a média de consumo dos últimos 12 meses. Esta informação pode ser verificada na sua fatura de energia. Conforme destacado em vermelho na imagem abaixo:");
+    this.presentInfoModal("Média KWh", "sc/Celesc_Consumo_medio.jpg", "Informe neste campo a média de consumo dos últimos 12 meses. Esta informação pode ser verificada na sua fatura de energia. Conforme destacado em vermelho na imagem.");
   }
 
   ajudaValorTarifa(): void {
-    this.presentInfoModal("Informação: Valor tarifa", "sc/Celesc_tarifa.jpg", "Informe o valor da tarifa de energia em kwh. Esta informação pode ser verificada na sua fatura de energia. Conforme destacado em vermelho na imagem abaixo:");
+    this.presentInfoModal("Valor tarifa", "sc/Celesc_tarifa.jpg", "Informe o valor da tarifa de energia em kwh. Esta informação pode ser verificada na sua fatura de energia. Conforme destacado em vermelho na imagem.");
   }
 
   ajudaValorTarifaExcedente(): void {
-    this.presentInfoModal("Informação: Valor tarifa excedente", "sc/Celesc_tarifa_excedente.jpg", "Algumas concencionárias de energia elétrica do Brasil trabalham com diferentes tarifas. Verifique na sua fatura se a concencionária da sua região possui mais de uma tarifa. Conforme destacado em vermelho na imagem abaixo:");
+    this.presentInfoModal("Valor tarifa excedente", "sc/Celesc_tarifa_excedente.jpg", "Algumas concencionárias de energia elétrica do Brasil trabalham com diferentes tarifas. Verifique na sua fatura se a concencionária da sua região possui mais de uma tarifa. Conforme destacado em vermelho na imagem.");
   }
   
   Calcula(mediaKw, valorTarifa, valorTarifaExcedente, tipoRede):void {

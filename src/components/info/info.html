@@ -1,16 +1,12 @@
-<ion-header>
-    <ion-navbar>
-      <ion-title>{{title}}</ion-title>
-    </ion-navbar>
-  </ion-header>
-  
   <ion-content padding>
-
-  <div>
-    {{text}}
-  </div>
-<br>
-  <ion-img style="border: solid 1px black;" height="100%" width="100%" src="{{img}}"></ion-img>
-
-  <button ion-button block (click)="voltar()">Voltar</button>
+    <ion-card>
+        <img src="{{img}}">
+        <ion-card-content>
+          <ion-card-title>{{title}}</ion-card-title>
+          <p>{{text}}</p>
+        </ion-card-content>
+        <ion-row no-padding>
+          <button ion-button block (click)="voltar()">Voltar</button>          
+        </ion-row>
+    </ion-card>  
 </ion-content>
