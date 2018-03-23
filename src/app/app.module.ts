@@ -17,6 +17,17 @@ import { ResultComponent } from '../components/result/result';
 import { ServidorProvider } from '../providers/servidor/servidor';
 import { TabsPage } from '../pages/tabs/tabs';
 
+import { AngularFireModule, FirebaseAppConfig } from 'angularfire2';
+
+const firebaseAppConfig: FirebaseAppConfig = {
+  apiKey: "AIzaSyDJk6rV_N4xq8cmFYov5xqalcv-RrOKkqQ",
+  authDomain: "ionic2-ks.firebaseapp.com",
+  databaseURL: "https://ionic2-ks.firebaseio.com",
+  projectId: "ionic2-ks",
+  storageBucket: "ionic2-ks.appspot.com",
+  messagingSenderId: "973664543161"
+}
+
 @NgModule({
   declarations: [
     AboutPage,
@@ -33,7 +44,8 @@ import { TabsPage } from '../pages/tabs/tabs';
     BrowserModule,
     HttpModule,
     HttpClientModule,
-    IonicModule.forRoot(MyApp)
+    IonicModule.forRoot(MyApp),
+    AngularFireModule.initializeApp(firebaseAppConfig)
   ],
   bootstrap: [IonicApp],
   entryComponents: [
