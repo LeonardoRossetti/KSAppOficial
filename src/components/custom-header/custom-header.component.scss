@@ -1,0 +1,17 @@
+custom-header {
+    .logo {
+        float: right;
+        height: 50px;
+    }
+    
+    .title {
+        text-align: center;
+    }
+    
+    .title span {
+        position: absolute;
+        top: 50%;
+        left: 30%;
+        transform: translateX(-50%) translateY(-50%);
+    }
+}

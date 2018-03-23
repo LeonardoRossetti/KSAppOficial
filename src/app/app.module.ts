@@ -8,6 +8,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { AboutPage } from '../pages/about/about';
 import { ContactPage } from '../pages/contact/contact';
+import { CustomHeaderComponent } from './../components/custom-header/custom-header.component';
 import { HomePage } from '../pages/home/home';
 import { InfoComponent } from '../components/info/info';
 import { MoedaPipe } from './../pipes/moeda/moeda';
@@ -20,6 +21,7 @@ import { TabsPage } from '../pages/tabs/tabs';
   declarations: [
     AboutPage,
     ContactPage,
+    CustomHeaderComponent,
     HomePage,
     InfoComponent,
     MoedaPipe,
