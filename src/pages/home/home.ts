@@ -1,12 +1,18 @@
 import { Component } from '@angular/core';
-import { NavController, AlertController, ModalController } from 'ionic-angular';
+import { NavController, AlertController, ModalController, LoadingController } from 'ionic-angular';
 
 import { InfoComponent } from './../../components/info/info';
 import { ResultComponent } from './../../components/result/result';
-import { ServidorProvider } from './../../providers/servidor/servidor';
 
-//declare var jquery: any;
-//declare var $: any;
+import { Cidade } from '../../models/cidades.models';
+import { CidadeService } from '../../providers/cidade/cidade.service';
+import { Estado } from '../../models/estados.models';
+import { EstadoService } from '../../providers/estado/estado.service';
+import { Observable } from 'rxjs/Observable';
+import { AngularFireDatabase } from 'angularfire2/database';
+import { ValorKit } from '../../models/valorkit.models';
+import { ValorKitService } from '../../providers/valorKit/valorKit.service';
+
 
 @Component({
   selector: 'page-home',
@@ -14,37 +20,50 @@ import { ServidorProvider } from './../../providers/servidor/servidor';
 })
 export class HomePage {
 
+  estados: Observable<Estado[]>;
+  estadoSelecionado: string;
+  cidades: Observable<Cidade[]>;
+  cidadeSelecionada: string;
+  currentCidade: Cidade;
+  valorKit: Observable<ValorKit[]>;
+  currentValorKit: ValorKit; 
+  radiacaoCidade: number = 4.42; //valor default
+
   constructor(
     public alertCtrl: AlertController,
+    public db: AngularFireDatabase,
+    public cidadeService: CidadeService,
+    public estadoService: EstadoService,
+    public loadingCtrl: LoadingController,
     public modalCtrl: ModalController,
-    public navCtrl: NavController, 
-    public servidor: ServidorProvider
+    public navCtrl: NavController,
+    public valorKitService: ValorKitService
   ) { }
     
-  ionViewDidEnter(): void {
-    //let estados: {};
-    //let cidades: {};
+  ionViewDidLoad() {
+    this.estados = this.estadoService.getAll();
+    this.valorKit = this.valorKitService.getAll();
+  }
 
-    console.log("executou!!!");
+  carregaCidades(): void {
+    this.cidadeSelecionada = null;
+    this.currentCidade = null;
+    this.cidades = this.cidadeService.getAll(this.estadoSelecionado);
+  }
 
+  mudaCidadeSelecionada(): void { 
+    //ao mudar o estado selecionado nao existe cidade selecionada
+    //dava erro ao tentar ler a propriedade radiacao sem ter cidade selecionada  
+    if (this.cidadeSelecionada == null) {
+      return;
+    }
+
+    this.currentCidade = this.cidadeService.listaCidades.filter(x=> x.$key == this.cidadeSelecionada)[0];
+    this.radiacaoCidade = parseFloat(this.currentCidade.radiacao);
+
+    //test
     
-
-    // this.serverService.getTeste()
-    //   .subscribe(data => {
-    //     console.log(data);
-    //   });
-
-    this.carregaEstados();
   }
-
-  carregaEstados(): void{
-    let estados = this.servidor.getStates();
-    console.log(estados);
-  }
-
-  // carregaCidades(estado): void {
-  //   let cidades = this.serverService.getCities(estado);
-  // }
   
   /** Abre o modal de informacao */
   presentInfoModal(title, img, text) {
@@ -86,7 +105,7 @@ export class HomePage {
   
   Calcula(mediaKw, valorTarifa, valorTarifaExcedente, tipoRede):void {
     let sistemaSolarIdeal = 0;
-	  let radiacaoCidade = 4.42;
+	  
     let monofasico = 30;//diminui 30 kw da media antes de calcular o sistemaSolarIdeal 
 	  let bifasico = 50;
     let trifasico = 100;
@@ -106,7 +125,7 @@ export class HomePage {
      * 30: dias do mes
      * 0.77: média de perda de eficiencia do painel
      */
-    sistemaSolarIdeal = (mediaKw - tipoRedeValor) / 30 / radiacaoCidade / 0.77;
+    sistemaSolarIdeal = (mediaKw - tipoRedeValor) / 30 / this.radiacaoCidade / 0.77;
 
     let numeroPaineis = this.calculaNumeroPaineis(sistemaSolarIdeal, potenciaPainel);
 
@@ -215,25 +234,62 @@ export class HomePage {
     * se o sistemaSolarComercial for maior que 30.0 e menor que 55.0 o valor do watt é 3,5.
     */	
   calculaValorWatt(sistemaSolarComercial:number): number{
-    	
-		let valorWatt = 0;
-		if (sistemaSolarComercial <= 3)
-		{
-			valorWatt = 6.8;
-		}
-		else if (sistemaSolarComercial <= 6)
-		{
-			valorWatt = 5;
-		}
-		else if (sistemaSolarComercial <= 30)
-		{
-			valorWatt = 3.8;
-		}
-		else 
-		{
-			valorWatt = 3.5;
+    let valorWatt = "5"; //default
+
+    if (sistemaSolarComercial > 75)
+    {
+      this.showAlert("Alerta", "O valor do seu ");
     }
-    return valorWatt;
+
+		if (sistemaSolarComercial <= 5) {
+			valorWatt = this.valorKitService.listaValorKits.filter(x => x.$key == "ate5")[0].valor
+		}
+		else if (sistemaSolarComercial <= 10)	{
+			valorWatt = this.valorKitService.listaValorKits.filter(x => x.$key == "de5a10")[0].valor
+		}
+		else if (sistemaSolarComercial <= 15)	{
+			valorWatt = this.valorKitService.listaValorKits.filter(x => x.$key == "de10a15")[0].valor
+		}
+		else if (sistemaSolarComercial <= 20)	{
+			valorWatt = this.valorKitService.listaValorKits.filter(x => x.$key == "de15a20")[0].valor
+		}
+		else if (sistemaSolarComercial <= 25)	{
+			valorWatt = this.valorKitService.listaValorKits.filter(x => x.$key == "de20a25")[0].valor
+		}
+		else if (sistemaSolarComercial <= 30)	{
+			valorWatt = this.valorKitService.listaValorKits.filter(x => x.$key == "de25a30")[0].valor
+		}
+		else if (sistemaSolarComercial <= 35)	{
+			valorWatt = this.valorKitService.listaValorKits.filter(x => x.$key == "de30a35")[0].valor
+		}
+		else if (sistemaSolarComercial <= 40)	{
+			valorWatt = this.valorKitService.listaValorKits.filter(x => x.$key == "de35a40")[0].valor
+		}
+		else if (sistemaSolarComercial <= 45)	{
+			valorWatt = this.valorKitService.listaValorKits.filter(x => x.$key == "de40a45")[0].valor
+		}
+		else if (sistemaSolarComercial <= 50)	{
+			valorWatt = this.valorKitService.listaValorKits.filter(x => x.$key == "de45a50")[0].valor
+		}
+		else if (sistemaSolarComercial <= 55)	{
+			valorWatt = this.valorKitService.listaValorKits.filter(x => x.$key == "de50a55")[0].valor
+		}
+		else if (sistemaSolarComercial <= 60)	{
+			valorWatt = this.valorKitService.listaValorKits.filter(x => x.$key == "de55a60")[0].valor
+		}
+		else if (sistemaSolarComercial <= 65)	{
+			valorWatt = this.valorKitService.listaValorKits.filter(x => x.$key == "de60a65")[0].valor
+		}
+		else if (sistemaSolarComercial <= 70)	{
+			valorWatt = this.valorKitService.listaValorKits.filter(x => x.$key == "de65a70")[0].valor
+		}
+		else if (sistemaSolarComercial <= 75)	{
+			valorWatt = this.valorKitService.listaValorKits.filter(x => x.$key == "de70a75")[0].valor
+    }
+    
+    console.log(valorWatt);
+    
+    return parseFloat(valorWatt);
   }
 
   showAlert(title, subTitle) {

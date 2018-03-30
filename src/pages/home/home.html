@@ -5,12 +5,17 @@
 <ion-content padding>
   <ion-list>
     <ion-item>
-        <ion-label>Estados</ion-label>
-        <ion-select [(ngModel)]="estados" cancelText="Cancelar" okText="OK">
-          <ion-option value="1">Santa Catarina</ion-option>
-          <ion-option value="2">Paraná</ion-option>
-          <ion-option value="3">Rio Grande do Sul</ion-option>
-        </ion-select>
+      <ion-label>Estados</ion-label>
+      <ion-select [(ngModel)]="estadoSelecionado" (ionChange)="carregaCidades();" cancelText="Cancelar" okText="OK">
+        <ion-option *ngFor="let estado of estados | async" value="{{estado.$key}}">{{estado.nome}}</ion-option>
+      </ion-select>
+    </ion-item>
+  
+    <ion-item>
+      <ion-label>Cidades</ion-label>
+      <ion-select [(ngModel)]="cidadeSelecionada" (ionChange)="mudaCidadeSelecionada()" cancelText="Cancelar" okText="OK">
+        <ion-option *ngFor="let cidade of cidades | async" value="{{cidade.$key}}">{{cidade.nome}}</ion-option>
+      </ion-select>
     </ion-item>
 
     <table style="width:100%">
@@ -23,7 +28,7 @@
           </ion-item>
         </td>
         <td>
-          <ion-icon float-right ios="ios-information-circle" md="md-information-circle" (click)="ajudaMediaKw()"></ion-icon>
+          <ion-icon class="icon-bigger" float-right ios="ios-information-circle" md="md-information-circle" (click)="ajudaMediaKw()"></ion-icon>
         </td>
       </tr>
       <tr>
@@ -34,7 +39,7 @@
           </ion-item>
         </td>
         <td>
-          <ion-icon float-right ios="ios-information-circle" md="md-information-circle" (click)="ajudaValorTarifa()"></ion-icon>
+          <ion-icon class="icon-bigger" float-right ios="ios-information-circle" md="md-information-circle" (click)="ajudaValorTarifa()"></ion-icon>
         </td>
     </tr>
     <tr>
@@ -45,7 +50,7 @@
           </ion-item>
         </td>
         <td>
-          <ion-icon float-right ios="ios-information-circle" md="md-information-circle" (click)="ajudaValorTarifaExcedente()"></ion-icon>
+          <ion-icon class="icon-bigger" float-right ios="ios-information-circle" md="md-information-circle" (click)="ajudaValorTarifaExcedente()"></ion-icon>
         </td>
     </tr>
   </table>
@@ -60,9 +65,16 @@
     </ion-item>
 <br>
 <button ion-button block icon-left (click)="Calcula(mediaKw.value, valorTarifa.value, valorTarifaExcedente.value, tipoRede)">
-    <ion-icon name="calculator"></ion-icon>
+    <ion-icon class="icon-bigger" name="calculator"></ion-icon>
   Calcular
 </button>
-
 </ion-list>
+
+<div>
+  <!-- Feito isso pq estava ficando carregando eternamente o loading do carregar valor kit se nao tivesse uma chamada
+  pra ele na tela. Não sei ainda o pq isso acontece! -->
+    <ion-item style="visibility: hidden;" *ngFor="let kit of valorKit | async">
+      <ion-label>{{kit.nome}}</ion-label>
+    </ion-item>
+  </div>
 </ion-content>

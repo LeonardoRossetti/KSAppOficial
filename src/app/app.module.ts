@@ -14,10 +14,14 @@ import { InfoComponent } from '../components/info/info';
 import { MoedaPipe } from './../pipes/moeda/moeda';
 import { MyApp } from './app.component';
 import { ResultComponent } from '../components/result/result';
-import { ServidorProvider } from '../providers/servidor/servidor';
 import { TabsPage } from '../pages/tabs/tabs';
 
+import { CidadeService } from '../providers/cidade/cidade.service';
+import { EstadoService } from '../providers/estado/estado.service';
+import { ValorKitService } from './../providers/valorKit/valorKit.service';
+
 import { AngularFireModule, FirebaseAppConfig } from 'angularfire2';
+import { AngularFireDatabaseModule } from 'angularfire2/database';
 
 const firebaseAppConfig: FirebaseAppConfig = {
   apiKey: "AIzaSyDJk6rV_N4xq8cmFYov5xqalcv-RrOKkqQ",
@@ -45,7 +49,8 @@ const firebaseAppConfig: FirebaseAppConfig = {
     HttpModule,
     HttpClientModule,
     IonicModule.forRoot(MyApp),
-    AngularFireModule.initializeApp(firebaseAppConfig)
+    AngularFireModule.initializeApp(firebaseAppConfig),
+    AngularFireDatabaseModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -59,9 +64,11 @@ const firebaseAppConfig: FirebaseAppConfig = {
   ],
   providers: [
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    ServidorProvider,
     SplashScreen,
-    StatusBar
+    StatusBar,
+    CidadeService,
+    EstadoService,
+    ValorKitService
   ]
 })
 export class AppModule {}
