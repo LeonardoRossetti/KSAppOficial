@@ -1,4 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
+import { Camera } from '@ionic-native/camera';
+import { EmailComposer } from '@ionic-native/email-composer';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { HttpClientModule } from '@angular/common/http';
 import { HttpModule } from '@angular/http';
@@ -63,6 +65,8 @@ const firebaseAppConfig: FirebaseAppConfig = {
     TabsPage
   ],
   providers: [
+    Camera,
+    EmailComposer,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     SplashScreen,
     StatusBar,

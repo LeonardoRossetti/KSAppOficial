@@ -59,17 +59,14 @@ export class HomePage {
     }
 
     this.currentCidade = this.cidadeService.listaCidades.filter(x=> x.$key == this.cidadeSelecionada)[0];
-    this.radiacaoCidade = parseFloat(this.currentCidade.radiacao);
-
-    //test
-    
+    this.radiacaoCidade = parseFloat(this.currentCidade.radiacao);    
   }
   
   /** Abre o modal de informacao */
   presentInfoModal(title, img, text) {
     let infoModal = this.modalCtrl.create(InfoComponent, { title: title, text: text, img: img });
     infoModal.onDidDismiss(data => {
-      console.log(data);
+//      console.log(data);
     });
     infoModal.present();
   }
@@ -86,7 +83,7 @@ export class HomePage {
         tempoInvestimento: tempoInvestimento
        });
        resultModal.onDidDismiss(data => {
-      console.log(data);
+      //console.log(data);
     });
     resultModal.present();
   }
@@ -238,7 +235,7 @@ export class HomePage {
 
     if (sistemaSolarComercial > 75)
     {
-      this.showAlert("Alerta", "O valor do seu ");
+      this.showAlert("Alerta", "Para sistemas em alta tensão e com uma maior demanda é necessário uma análise técnica para o dimensionamento do seu gerador solar. Entre em contato com a KS para uma avaliação gratuita.");
     }
 
 		if (sistemaSolarComercial <= 5) {
@@ -286,9 +283,7 @@ export class HomePage {
 		else if (sistemaSolarComercial <= 75)	{
 			valorWatt = this.valorKitService.listaValorKits.filter(x => x.$key == "de70a75")[0].valor
     }
-    
-    console.log(valorWatt);
-    
+        
     return parseFloat(valorWatt);
   }
 
