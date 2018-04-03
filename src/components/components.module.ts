@@ -1,15 +1,15 @@
 import { NgModule } from '@angular/core';
-import { InfoComponent } from './info/info';
-import { ResultComponent } from './result/result';
-import { CustomHeaderComponent } from './custom-header/custom-header.component';
+//import { InfoComponent } from './info/info';
+//import { ResultComponent } from './result/result';
+//import { CustomHeaderComponent } from './custom-header/custom-header.component';
 
 @NgModule({
-	declarations: [InfoComponent,
+	declarations: [/*InfoComponent,
     ResultComponent,
-    CustomHeaderComponent],
+    CustomHeaderComponent*/],
 	imports: [],
-	exports: [InfoComponent,
+	exports: [/*InfoComponent,
     ResultComponent,
-    CustomHeaderComponent]
+    CustomHeaderComponent*/]
 })
 export class ComponentsModule {}

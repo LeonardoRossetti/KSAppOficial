@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
-import { MoedaPipe } from './moeda/moeda';
+//import { MoedaPipe } from './moeda/moeda';
 @NgModule({
-	declarations: [MoedaPipe],
+	declarations: [/*MoedaPipe*/],
 	imports: [],
-	exports: [MoedaPipe]
+	exports: [/*MoedaPipe*/]
 })
 export class PipesModule {}

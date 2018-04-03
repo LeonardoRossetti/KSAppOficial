@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="leoo.rossetti" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="leoo.rossetti.ksOficial" version="0.0.2" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>KSAppOficial</name>
     <description>An awesome Ionic/Cordova app to calculate the price of a solar kit.</description>
     <author email="leoo.rossetti@gmail.com" href="http://www.ksenergia.com.br/">Leonardo Rossetti</author>
@@ -84,6 +84,6 @@
     <plugin name="onesignal-cordova-plugin" spec="~2.3.2" />
     <allow-navigation href="http://192.168.56.1:8100" />
     <allow-navigation href="http://192.168.1.100:8100" />
-    <engine name="android" spec="7.0.0" />
     <plugin name="cordova-plugin-camera" spec="^4.0.2" />
+    <engine name="android" spec="7.0.0" />
 </widget>
