@@ -18,7 +18,7 @@ export class InfoComponent {
     this.title = this.navParams.get("title");
     this.text = this.navParams.get("text");
     // this.img = "./../../assets/imgs/" + this.navParams.get("img");
-    this.img = "./assets/imgs/" + this.navParams.get("img");
+    this.img = "assets/imgs/" + this.navParams.get("img");
   }
 
   voltar(): void {

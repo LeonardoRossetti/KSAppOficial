@@ -56,15 +56,15 @@ export class ContactPage {
       isHtml: true
     };
 
+    this.emailComposer.open(email);
 
 
-
-    this.emailComposer.isAvailable().then((available: boolean) =>{
-      if(available) {    
-        // Send a text message using default options
-        this.emailComposer.open(email);
-      }
-     });
+    // this.emailComposer.isAvailable().then((available: boolean) =>{
+    //   if(available) {    
+    //     // Send a text message using default options
+    //     this.emailComposer.open(email);
+    //   }
+    //  });
 
   
      
