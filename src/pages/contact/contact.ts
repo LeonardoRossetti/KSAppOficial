@@ -24,16 +24,9 @@ export class ContactPage {
    * Enviar junto as informaçoes preenchidas na primeira página do calculo.
    */
 
-  sendEmail(){
+  sendEmail(nome, emailCliente, telefone, mensagem){
 
-    this.emailComposer.isAvailable().then((available: boolean) =>{
-      if(available) {
-        //Now we know we can send
-        console.log('permitido enviar o email');
-      }
-     });
-
-     let email = {
+    let email = {
       to: 'leoo.rossetti@gmail.com',
       cc: 'leoo.rossetti@gmail.com',
       bcc: ['leoo.rossetti@gmail.com'],
@@ -41,19 +34,45 @@ export class ContactPage {
         this.currentImage
       ],
       subject: 'Cordova Icons',
-      body: 'How are you? Nice greetings from Leipzig',
+      body: `<table>
+              <tr><td>Email enviado do app</td></tr>
+              <tr>
+                <td>Nome:</td>
+                <td>${nome}</td>
+              </tr>
+              <tr>
+                <td>Email:</td>
+                <td>${emailCliente}</td>
+              </tr>
+              <tr>
+                <td>Telefone:</td>
+                <td>${telefone}</td>
+              </tr>
+              <tr>
+                <td>Mensagem:</td>
+                <td>${mensagem}</td>
+              </tr>
+            </table>`,
       isHtml: true
     };
-    
-    // Send a text message using default options
-    this.emailComposer.open(email);
+
+
+
+
+    this.emailComposer.isAvailable().then((available: boolean) =>{
+      if(available) {    
+        // Send a text message using default options
+        this.emailComposer.open(email);
+      }
+     });
+
+  
      
 
     // add alias
     //email.addAlias('gmail', 'com.google.android.gm');
 
 
-    console.log('email enviado');
 
    }
 

@@ -19,7 +19,7 @@ import { ValorKitService } from '../../providers/valorKit/valorKit.service';
   templateUrl: 'home.html'
 })
 export class HomePage {
-
+  abvEstadoSelecionado: string = 'SC';
   estados: Observable<Estado[]>;
   estadoSelecionado: string;
   cidades: Observable<Cidade[]>;
@@ -48,6 +48,7 @@ export class HomePage {
   carregaCidades(): void {
     this.cidadeSelecionada = null;
     this.currentCidade = null;
+    this.abvEstadoSelecionado = this.estadoSelecionado;
     this.cidades = this.cidadeService.getAll(this.estadoSelecionado);
   }
 
@@ -89,18 +90,35 @@ export class HomePage {
   }
 
   ajudaMediaKw(): void {
-    this.presentInfoModal("Média KWh", "sc/Celesc_Consumo_medio.jpg", "Informe neste campo a média de consumo dos últimos 12 meses. Esta informação pode ser verificada na sua fatura de energia. Conforme destacado em vermelho na imagem.");
+
+    this.presentInfoModal("Média KWh", `${this.abvEstadoSelecionado}/consumo_medio.jpg`, "Informe neste campo a média de consumo dos últimos 12 meses. Esta informação pode ser verificada na sua fatura de energia. Conforme destacado em vermelho na imagem.");
   }
 
   ajudaValorTarifa(): void {
-    this.presentInfoModal("Valor tarifa", "sc/Celesc_tarifa.jpg", "Informe o valor da tarifa de energia em kwh. Esta informação pode ser verificada na sua fatura de energia. Conforme destacado em vermelho na imagem.");
+    this.presentInfoModal("Valor tarifa", `${this.abvEstadoSelecionado}/tarifa.jpg`, "Informe o valor da tarifa de energia em kwh. Esta informação pode ser verificada na sua fatura de energia. Conforme destacado em vermelho na imagem.");
   }
 
   ajudaValorTarifaExcedente(): void {
-    this.presentInfoModal("Valor tarifa excedente", "sc/Celesc_tarifa_excedente.jpg", "Algumas concencionárias de energia elétrica do Brasil trabalham com diferentes tarifas. Verifique na sua fatura se a concencionária da sua região possui mais de uma tarifa. Conforme destacado em vermelho na imagem.");
+    if (this.abvEstadoSelecionado == 'SC')
+    {
+      this.presentInfoModal("Valor tarifa excedente", `${this.abvEstadoSelecionado}/tarifa_excedente.jpg`, "Algumas concencionárias de energia elétrica do Brasil trabalham com diferentes tarifas. Verifique na sua fatura se a concencionária da sua região possui mais de uma tarifa. Conforme destacado em vermelho na imagem.");
+    } else {
+      this.showAlert("Informação", "O estado selecionado não possui tarifa excedente!");
+    }
   }
   
   Calcula(mediaKw, valorTarifa, valorTarifaExcedente, tipoRede):void {
+
+    if(this.estadoSelecionado == null 
+      ||this.cidadeSelecionada == null
+      ||mediaKw == ""
+      ||valorTarifa == ""
+      ||tipoRede == null)
+    {
+      this.showAlert("Ops!", "Informe todos os campos!");
+      return;
+    }
+
     let sistemaSolarIdeal = 0;
 	  
     let monofasico = 30;//diminui 30 kw da media antes de calcular o sistemaSolarIdeal 

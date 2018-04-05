@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="leoo.rossetti.ksOficial" version="0.0.2" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>KSAppOficial</name>
-    <description>An awesome Ionic/Cordova app to calculate the price of a solar kit.</description>
+<widget id="leoo.rossetti.ksOficial" version="0.0.4" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>Energia solar</name>
+    <description>An awesome app to calculate the price of a solar kit.</description>
     <author email="leoo.rossetti@gmail.com" href="http://www.ksenergia.com.br/">Leonardo Rossetti</author>
     <content src="index.html" />
     <access origin="*" />

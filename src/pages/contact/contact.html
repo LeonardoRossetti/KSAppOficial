@@ -28,9 +28,16 @@
         </ion-label>
         <ion-input type="number" #telefone></ion-input>
       </ion-item>
+      <ion-item>
+        <ion-label floating>
+            <ion-icon class="icon-bigger" name="text"></ion-icon>
+            Mensagem (500)
+        </ion-label>
+        <ion-textarea #mensagem rows="1" maxLength="500"></ion-textarea>
+      </ion-item>
 <br>
       <button ion-button full (click)="captureImage()">Foto da fatura</button>
       <br>
-      <button ion-button full (click)="sendEmail()">Enviar</button>
+      <button ion-button full (click)="sendEmail(nome.value, email.value, telefone.value, mensagem.value)">Enviar</button>
   </ion-list>
 </ion-content>
