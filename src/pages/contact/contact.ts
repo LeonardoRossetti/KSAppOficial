@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { EmailComposer } from '@ionic-native/email-composer';
-import { NavController } from 'ionic-angular';
-
+import { NavController, AlertController } from 'ionic-angular';
 
 @Component({
   selector: 'page-contact',
@@ -13,68 +12,62 @@ export class ContactPage {
   currentImage = null;
 
   constructor(
+    public alertCtrl: AlertController,
     private camera: Camera,
     private emailComposer: EmailComposer,
     public navCtrl: NavController) {
   }
 
   /**
-   * Colocar um campo de foto para o usuario informar a foto da fatura.
-   * Campos: Nome, email e telefone
    * Enviar junto as informaçoes preenchidas na primeira página do calculo.
    */
-
-  sendEmail(nome, emailCliente, telefone, mensagem){
-
+  sendEmail(nome, emailCliente, telefone, mensagem) {
     let email = {
-      to: 'leoo.rossetti@gmail.com',
-      cc: 'leoo.rossetti@gmail.com',
-      bcc: ['leoo.rossetti@gmail.com'],
+      app: 'gmail',
+      to: ['leoo.rossetti@gmail.com', 'ksenergia@ksenergia.com.br'],
       attachments: [
         this.currentImage
       ],
-      subject: 'Cordova Icons',
-      body: `<table>
-              <tr><td>Email enviado do app</td></tr>
-              <tr>
-                <td>Nome:</td>
-                <td>${nome}</td>
-              </tr>
-              <tr>
-                <td>Email:</td>
-                <td>${emailCliente}</td>
-              </tr>
-              <tr>
-                <td>Telefone:</td>
-                <td>${telefone}</td>
-              </tr>
-              <tr>
-                <td>Mensagem:</td>
-                <td>${mensagem}</td>
-              </tr>
-            </table>`,
+      subject: 'App | Contato do cliente',
+      body: `<div align="left">
+              <b>Email enviado do app</b>
+              <br><br> 
+              <strong>Nome: </strong>${nome}
+              <br><br> 
+              <strong>Email: </strong>${emailCliente}
+              <br><br> 
+              <strong>Telefone: </strong>${telefone}
+              <br><br> 
+              <strong>Mensagem: </strong>${mensagem}
+            </div>`, 
       isHtml: true
-    };
-
-    this.emailComposer.open(email);
-
-
-    // this.emailComposer.isAvailable().then((available: boolean) =>{
-    //   if(available) {    
-    //     // Send a text message using default options
-    //     this.emailComposer.open(email);
-    //   }
-    //  });
-
-  
+    }
      
-
-    // add alias
-    //email.addAlias('gmail', 'com.google.android.gm');
-
-
-
-   }
+    // Use the plugin isAvailable method to check whether
+    // the user has configured an email account
+    this.emailComposer.isAvailable()
+    .then((available: boolean) =>
+    {
+      // Check that plugin has been granted access permissions to
+      // user's e-mail account
+      this.emailComposer.hasPermission()
+      .then((isPermitted : boolean) =>
+      {
+        // Open the device e-mail client and create
+        // a new e-mail message populated with the
+        // object containing our message data
+        this.emailComposer.open(email);
+      }).catch((error : any) =>
+      {
+        console.log('No access permission granted');
+        console.dir(error);
+      });
+    }).catch((error : any) =>
+    {
+      console.log('User does not appear to have device e-mail account');
+      console.dir(error);
+    });
+}
 
    captureImage() {
     const options: CameraOptions = {
@@ -89,19 +82,4 @@ export class ContactPage {
       console.log('Image error: ', err);
     });
   }
-
-  _sendEmail() {
-    let email = {
-      to: 'leoo.rossetti@gmail.com',
-      cc: 'leoo.rossetti@gmail.com',
-      attachments: [
-        this.currentImage
-      ],
-      subject: 'My Cool Image',
-      body: 'Hey Simon, what do you thing about this image?',
-      isHtml: true
-    };
- 
-    this.emailComposer.open(email);
-}
 }
