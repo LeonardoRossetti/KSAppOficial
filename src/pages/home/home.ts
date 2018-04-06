@@ -19,7 +19,7 @@ import { ValorKitService } from '../../providers/valorKit/valorKit.service';
   templateUrl: 'home.html'
 })
 export class HomePage {
-  abvEstadoSelecionado: string = 'SC';
+  abvEstadoSelecionado: string = 'sc';
   estados: Observable<Estado[]>;
   estadoSelecionado: string;
   cidades: Observable<Cidade[]>;
@@ -48,7 +48,7 @@ export class HomePage {
   carregaCidades(): void {
     this.cidadeSelecionada = null;
     this.currentCidade = null;
-    this.abvEstadoSelecionado = this.estadoSelecionado;
+    this.abvEstadoSelecionado = this.estadoSelecionado.toLowerCase();
     this.cidades = this.cidadeService.getAll(this.estadoSelecionado);
   }
 
@@ -61,6 +61,15 @@ export class HomePage {
 
     this.currentCidade = this.cidadeService.listaCidades.filter(x=> x.$key == this.cidadeSelecionada)[0];
     this.radiacaoCidade = parseFloat(this.currentCidade.radiacao);    
+  }
+
+  ajudaTeste(caminho){
+    console.log(caminho);
+    let infoModal = this.modalCtrl.create(InfoComponent, { title: 'title', text: 'text', img: caminho });
+    infoModal.onDidDismiss(data => {
+//      console.log(data);
+    });
+    infoModal.present();
   }
   
   /** Abre o modal de informacao */
