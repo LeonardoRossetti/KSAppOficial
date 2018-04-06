@@ -3,3 +3,31 @@
 .icon-bigger {
     font-size:1.8em;
 }
+
+ion-content {
+    //background: #904779 !important;
+    //background-repeat: no-repeat;
+    background-image: url('assets/imgs/bkg_1.jpg');
+    background-position: center;
+    background-size: contain;
+}
+
+// ion-title {
+//     background-image: url('../assets/imgs/bkg_title.png');
+//     //background: #904779 !important;
+//     background-position: center;
+//     background-size: contain;
+// }
+
+.bg-items {
+    background: rgba(0, 0, 0, 0);
+}
+
+
+
+
+
+// .bg {
+//     //if we dont put first parameter (ex. to top) we will put to center automatically
+//     background: linear-gradient(to top, #904779 0%, #fff 100%);
+// }

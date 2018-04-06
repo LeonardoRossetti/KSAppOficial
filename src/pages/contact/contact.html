@@ -5,39 +5,39 @@
 <ion-content>
   <ion-list>
     
-      <ion-item>
-        <ion-label floating>
+      <ion-item class="bg-items">
+        <ion-label color="light" floating>
             <ion-icon class="icon-bigger" name="person"></ion-icon>
             Nome
         </ion-label>
         <ion-input type="text" #nome></ion-input>
       </ion-item>
 
-      <ion-item>
-        <ion-label floating>
+      <ion-item class="bg-items">
+        <ion-label color="light" floating>
             <ion-icon class="icon-bigger" name="mail"></ion-icon>
             E-mail
         </ion-label>
         <ion-input type="text" #email></ion-input>
       </ion-item>
 
-      <ion-item>
-        <ion-label floating>
+      <ion-item class="bg-items">
+        <ion-label color="light" floating>
             <ion-icon class="icon-bigger" name="call"></ion-icon>
             Telefone
         </ion-label>
         <ion-input type="number" #telefone></ion-input>
       </ion-item>
-      <ion-item>
-        <ion-label floating>
+      <ion-item class="bg-items">
+        <ion-label color="light" floating>
             <ion-icon class="icon-bigger" name="text"></ion-icon>
             Mensagem (500)
         </ion-label>
         <ion-textarea #mensagem rows="1" maxLength="500"></ion-textarea>
       </ion-item>
-<br>
-      <button ion-button full (click)="captureImage()">Foto da fatura</button>
       <br>
-      <button ion-button full (click)="sendEmail(nome.value, email.value, telefone.value, mensagem.value)">Enviar</button>
+      <button ion-button clear full style="border: 1px white solid; border-radius: 5px;" color="light" (click)="captureImage()">Foto da fatura</button>
+      <br>
+      <button ion-button clear full style="border: 1px white solid; border-radius: 5px;" color="light" (click)="sendEmail(nome.value, email.value, telefone.value, mensagem.value)">Enviar e-mail</button>
   </ion-list>
 </ion-content>

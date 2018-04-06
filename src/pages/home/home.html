@@ -2,17 +2,17 @@
     <custom-header title="Calculadora Solar"></custom-header>
 </ion-header>
 
-<ion-content padding>
+<ion-content padding class="bg">
   <ion-list>
-    <ion-item>
-      <ion-label>Estado</ion-label>
+    <ion-item class="bg-items">
+      <ion-label color="light">Estado</ion-label>
       <ion-select [(ngModel)]="estadoSelecionado" (ionChange)="carregaCidades();" cancelText="Cancelar" okText="OK">
         <ion-option *ngFor="let estado of estados | async" value="{{estado.$key}}">{{estado.nome}}</ion-option>
       </ion-select>
     </ion-item>
   
-    <ion-item>
-      <ion-label>Cidade</ion-label>
+    <ion-item class="bg-items">
+      <ion-label color="light">Cidade</ion-label>
       <ion-select [(ngModel)]="cidadeSelecionada" (ionChange)="mudaCidadeSelecionada()" cancelText="Cancelar" okText="OK">
         <ion-option *ngFor="let cidade of cidades | async" value="{{cidade.$key}}">{{cidade.nome}}</ion-option>
       </ion-select>
@@ -21,42 +21,42 @@
     <table style="width:100%">
       <tr>
         <td style="width:98%">
-          <ion-item>
-            <ion-label floating>Média KWh/mês</ion-label>
+          <ion-item class="bg-items">
+            <ion-label color="light" floating>Média KWh/mês</ion-label>
             <ion-input type="number" maxlength="10" #mediaKw>
             </ion-input>
           </ion-item>
         </td>
         <td>
-          <ion-icon class="icon-bigger" float-right ios="ios-information-circle" md="md-help" (click)="ajudaMediaKw()"></ion-icon>
+          <ion-icon color="light" class="icon-bigger" float-right ios="ios-information-circle" md="md-help" (click)="ajudaMediaKw()"></ion-icon>
         </td>
       </tr>
       <tr>
         <td style="width:98%">
-          <ion-item>
-            <ion-label floating>Valor tarifa</ion-label>
+          <ion-item class="bg-items">
+            <ion-label color="light" floating>Valor tarifa</ion-label>
             <ion-input type="number" #valorTarifa></ion-input>
           </ion-item>
         </td>
         <td>
-          <ion-icon class="icon-bigger" float-right ios="ios-information-circle" md="md-help-circle" (click)="ajudaValorTarifa()"></ion-icon>
+          <ion-icon color="light" class="icon-bigger" float-right ios="ios-information-circle" md="md-help-circle" (click)="ajudaValorTarifa()"></ion-icon>
         </td>
     </tr>
     <tr>
         <td style="width:98%">
-          <ion-item>
-            <ion-label floating>Valor tarifa excedente</ion-label>
+          <ion-item class="bg-items">
+            <ion-label color="light" floating>Valor tarifa excedente</ion-label>
             <ion-input type="number" maxlength="10" #valorTarifaExcedente></ion-input>
           </ion-item>
         </td>
         <td>
-          <ion-icon class="icon-bigger" float-right ios="ios-information-circle" md="md-information-circle" (click)="ajudaValorTarifaExcedente()"></ion-icon>
+          <ion-icon color="light" class="icon-bigger" float-right ios="ios-information-circle" md="md-information-circle" (click)="ajudaValorTarifaExcedente()"></ion-icon>
         </td>
     </tr>
   </table>
 <br>
-    <ion-item>
-      <ion-label>Tipo da rede</ion-label>
+    <ion-item class="bg-items">
+      <ion-label color="light">Tipo da rede</ion-label>
       <ion-select [(ngModel)]="tipoRede" cancelText="Cancelar" okText="OK">
         <ion-option value="monofasico">Monofasico</ion-option>
         <ion-option value="trifasico">Trifasico</ion-option>
@@ -64,7 +64,7 @@
       </ion-select>
     </ion-item>
 <br>
-<button ion-button block icon-left (click)="Calcula(mediaKw.value, valorTarifa.value, valorTarifaExcedente.value, tipoRede)">
+<button ion-button clear full style="border: 1px white solid; border-radius: 5px;" color="light" icon-left (click)="Calcula(mediaKw.value, valorTarifa.value, valorTarifaExcedente.value, tipoRede)">
     <ion-icon class="icon-bigger" name="calculator"></ion-icon>
   Calcular
 </button>
