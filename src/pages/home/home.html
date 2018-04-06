@@ -17,10 +17,10 @@
         <ion-option *ngFor="let cidade of cidades | async" value="{{cidade.$key}}">{{cidade.nome}}</ion-option>
       </ion-select>
     </ion-item>
-
-    <table style="width:100%">
-      <tr>
-        <td style="width:98%">
+<br>
+    <table style="width:100%;">
+      <tr class="tableLine">
+        <td>
           <ion-item class="bg-items">
             <ion-label color="light" floating>Média KWh/mês</ion-label>
             <ion-input type="number" maxlength="10" #mediaKw>
@@ -28,34 +28,45 @@
           </ion-item>
         </td>
         <td>
-          <ion-icon color="light" class="icon-bigger" float-right ios="ios-information-circle" md="md-help" (click)="ajudaMediaKw()"></ion-icon>
+          <button ion-button clear class="botao" icon-right (click)="ajudaMediaKw()">
+            Onde encontrar
+            <ion-icon color="light" class="icon-bigger" float-right ios="ios-information-circle" md="md-help"></ion-icon>
+          </button>
         </td>
       </tr>
-      <tr>
-        <td style="width:98%">
+      <tr><td><br></td></tr>
+      <tr class="tableLine">
+        <td>
           <ion-item class="bg-items">
             <ion-label color="light" floating>Valor tarifa</ion-label>
             <ion-input type="number" #valorTarifa></ion-input>
           </ion-item>
         </td>
         <td>
-          <ion-icon color="light" class="icon-bigger" float-right ios="ios-information-circle" md="md-help-circle" (click)="ajudaValorTarifa()"></ion-icon>
+          <button ion-button clear class="botao" icon-right (click)="ajudaValorTarifa()">
+            Onde encontrar
+            <ion-icon color="light" class="icon-bigger" float-right ios="ios-information-circle" md="md-help"></ion-icon>
+          </button>
         </td>
     </tr>
-    <tr>
-        <td style="width:98%">
+    <tr><td><br></td></tr>
+    <tr class="tableLine">
+        <td>
           <ion-item class="bg-items">
             <ion-label color="light" floating>Valor tarifa excedente</ion-label>
             <ion-input type="number" maxlength="10" #valorTarifaExcedente></ion-input>
           </ion-item>
         </td>
         <td>
-          <ion-icon color="light" class="icon-bigger" float-right ios="ios-information-circle" md="md-information-circle" (click)="ajudaValorTarifaExcedente()"></ion-icon>
+          <button ion-button clear class="botao" icon-right (click)="ajudaValorTarifaExcedente()">
+            Onde encontrar
+            <ion-icon color="light" class="icon-bigger" float-right ios="ios-information-circle" md="md-help"></ion-icon>
+          </button>
         </td>
     </tr>
   </table>
 <br>
-    <ion-item class="bg-items">
+    <ion-item class="bg-items" style=" border:1px white solid;">
       <ion-label color="light">Tipo da rede</ion-label>
       <ion-select [(ngModel)]="tipoRede" cancelText="Cancelar" okText="OK">
         <ion-option value="monofasico">Monofasico</ion-option>
@@ -64,11 +75,30 @@
       </ion-select>
     </ion-item>
 <br>
-<button ion-button clear full style="border: 1px white solid; border-radius: 5px;" color="light" icon-left (click)="Calcula(mediaKw.value, valorTarifa.value, valorTarifaExcedente.value, tipoRede)">
-    <ion-icon class="icon-bigger" name="calculator"></ion-icon>
+<button ion-button clear full class="botao" style="background-color: #FFF; color: black;" icon-left (click)="Calcula(mediaKw.value, valorTarifa.value, valorTarifaExcedente.value, tipoRede)">
+  <ion-icon class="icon-bigger" name="calculator"></ion-icon>
   Calcular
 </button>
 </ion-list>
+
+<div *ngIf="exibeResultado" id="resultado">
+  <h3>Resultado: </h3><br>
+  <label class="textoLabel">Sistema solar fotovoltaico: </label> <label>{{sistemaSolarComercial}}kw</label><br><br>
+  <label class="textoLabel">Número de paineis: </label> <label>{{numeroPaineis}}</label><br><br>
+  <label class="textoLabel">Área necessária: </label> <label>{{areaNecessaria}}m²</label><br><br>
+  <label class="textoLabel">Investimento aproximado: </label> <label>{{investimentoAproximado | moeda }}</label> <br><br>
+  <label class="textoLabel">Retorno do investimento: </label> <label>{{tempoInvestimento}}</label>
+</div>
+<br>
+<button ion-button clear full class="botao" icon-left (click)="Contato()">
+  <ion-icon class="icon-bigger" name="mail"></ion-icon>
+  Fale conosco
+</button>
+<br>
+<button ion-button clear full class="botao" icon-left (click)="Sobre()">
+  <ion-icon class="icon-bigger" name="information-circle"></ion-icon>
+  Sobre
+</button>
 
 <div>
   <!-- Feito isso pq estava ficando carregando eternamente o loading do carregar valor kit se nao tivesse uma chamada

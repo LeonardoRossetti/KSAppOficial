@@ -1,3 +1,5 @@
+import { AboutPage } from './../about/about';
+import { ContactPage } from './../contact/contact';
 import { Component } from '@angular/core';
 import { NavController, AlertController, ModalController, LoadingController } from 'ionic-angular';
 
@@ -19,6 +21,13 @@ import { ValorKitService } from '../../providers/valorKit/valorKit.service';
   templateUrl: 'home.html'
 })
 export class HomePage {
+  exibeResultado: boolean = false;
+  sistemaSolarComercial = 0;
+  numeroPaineis: number = 0;
+  areaNecessaria: number = 0;
+  investimentoAproximado: number = 0;
+  tempoInvestimento: string;
+
   abvEstadoSelecionado: string = 'sc';
   estados: Observable<Estado[]>;
   estadoSelecionado: string;
@@ -151,14 +160,14 @@ export class HomePage {
      */
     sistemaSolarIdeal = (mediaKw - tipoRedeValor) / 30 / this.radiacaoCidade / 0.77;
 
-    let numeroPaineis = this.calculaNumeroPaineis(sistemaSolarIdeal, potenciaPainel);
+    this.numeroPaineis = this.calculaNumeroPaineis(sistemaSolarIdeal, potenciaPainel);
 
-    let areaNecessaria = numeroPaineis * 2;
-    let sistemaSolarComercial = (numeroPaineis * potenciaPainel) / 1000;
+    this.areaNecessaria = this.numeroPaineis * 2;
+    this.sistemaSolarComercial = (this.numeroPaineis * potenciaPainel) / 1000;
 
-    let valorWatt = this.calculaValorWatt(sistemaSolarComercial);
+    let valorWatt = this.calculaValorWatt(this.sistemaSolarComercial);
 
-    let investimentoAproximado = (sistemaSolarComercial * 1000) * valorWatt;
+    this.investimentoAproximado = (this.sistemaSolarComercial * 1000) * valorWatt;
 
     let totalGeralTarifa = this.calculaTotalGeralTarifa(mediaKw, valorTarifa, valorTarifaExcedente);
     
@@ -174,10 +183,29 @@ export class HomePage {
       valorTaxaMinima = valorTarifa * monofasico; break;
     }
 
-    let tempoInvestimento = this.calculaTempoMedioRetornoInvestimento(investimentoAproximado, totalGeralTarifa, valorTaxaMinima)
+    this.tempoInvestimento = this.calculaTempoMedioRetornoInvestimento(this.investimentoAproximado, totalGeralTarifa, valorTaxaMinima)
 
+    this.investimentoAproximado = Math.round(this.investimentoAproximado);
+
+    this.exibeResultado = true;
     //Abre modal para exibir os resultados
-    this.presentResultModal("Resultado", sistemaSolarComercial, numeroPaineis, `${areaNecessaria}m²`, `${Math.round(investimentoAproximado)}`, tempoInvestimento);
+    //this.presentResultModal("Resultado", sistemaSolarComercial, numeroPaineis, `${areaNecessaria}m²`, `${Math.round(investimentoAproximado)}`, tempoInvestimento);
+  }
+
+  Contato():void {
+    this.navCtrl.push(ContactPage, 
+      {
+        efetuouCalculo: this.exibeResultado,
+        sistemaSolarComercial: this.sistemaSolarComercial,        
+        numeroPaineis: this.numeroPaineis,
+        areaNecessaria: this.areaNecessaria, 
+        investimentoAproximado: this.investimentoAproximado,        
+        tempoInvestimento: this.tempoInvestimento,        
+      });
+  }
+
+  Sobre(): void{
+    this.navCtrl.push(AboutPage);
   }
 
   /**

@@ -36,8 +36,28 @@
         <ion-textarea #mensagem rows="1" maxLength="500"></ion-textarea>
       </ion-item>
       <br>
-      <button ion-button clear full style="border: 1px white solid; border-radius: 5px;" color="light" (click)="captureImage()">Foto da fatura</button>
       <br>
-      <button ion-button clear full style="border: 1px white solid; border-radius: 5px;" color="light" (click)="sendEmail(nome.value, email.value, telefone.value, mensagem.value)">Enviar e-mail</button>
+      <h3 style="color:white;">Você pode anexar uma foto da fatura:</h3>
+      <table style="width:100%;">
+        <tr>
+          <td>
+            <button ion-button clear full class="botao" icon-left (click)="captureImage()">
+              <ion-icon class="icon-bigger" name="images"></ion-icon>
+              Imagem da galeria
+            </button>
+          </td>
+          <td>
+            <button ion-button clear full class="botao" icon-left (click)="captureFoto()">
+              <ion-icon class="icon-bigger" name="camera"></ion-icon>
+              Tire uma foto
+            </button>
+          </td>
+        </tr>
+      </table>
+      <br>
+      <button ion-button clear full class="botao" style="background-color: #FFF; color: black;" icon-left (click)="sendEmail(nome.value, email.value, telefone.value, mensagem.value)">
+        <ion-icon class="icon-bigger" name="mail"></ion-icon>
+        Enviar e-mail
+      </button>
   </ion-list>
 </ion-content>

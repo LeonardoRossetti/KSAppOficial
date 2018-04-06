@@ -8,4 +8,24 @@ page-home {
         background-color: $background;
     }
 
+    #resultado .textoLabel{
+        font-weight: bold;
+        color:#FFF;
+    }
+    
+    #resultado{
+        padding: 10px 2px 10px 2px;
+        border: 1px white solid;
+        font-size: 18px;
+        color:#FFF;
+    }
+
+    .tableLine{
+        border: 1px white solid;
+    }
+    
+    .tableLine td{
+        width: 98%;
+    }
+
 }

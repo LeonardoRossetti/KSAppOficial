@@ -4,10 +4,17 @@
     font-size:1.8em;
 }
 
+.botao{
+    border: 1px white solid;
+    border-radius: 5px;
+    color:#FFF;
+    padding:26px 5px 26px 5px;
+}
+
 ion-content {
     //background: #904779 !important;
     //background-repeat: no-repeat;
-    background-image: url('assets/imgs/bkg_1.jpg');
+    background-image: url('../assets/imgs/bkg_1.jpg');
     background-position: center;
     background-size: contain;
 }
