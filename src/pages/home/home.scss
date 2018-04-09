@@ -1,31 +1,27 @@
 page-home {
 
-    $background: red;
-
-    .box{
-        width: 100px;
-        height: 100px;
-        background-color: $background;
-    }
+    $font_color: white;
 
     #resultado .textoLabel{
         font-weight: bold;
-        color:#FFF;
+        color: $font_color;
     }
     
     #resultado{
         padding: 10px 2px 10px 2px;
         border: 1px white solid;
         font-size: 18px;
-        color:#FFF;
+        color: $font_color;
     }
 
-    .tableLine{
-        border: 1px white solid;
+    .itens{
+        background: rgba(0, 0, 0, 0); //deixa transparente
     }
     
-    .tableLine td{
-        width: 98%;
+    .itemSelect{
+        margin-left:-10px;
+        background: rgba(0, 0, 0, 0); //deixa transparente
     }
 
+    
 }

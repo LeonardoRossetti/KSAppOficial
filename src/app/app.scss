@@ -4,19 +4,44 @@
     font-size:1.8em;
 }
 
-.botao{
-    border: 1px white solid;
+.botao {
+    border: 1px #AFEEEE solid;
     border-radius: 5px;
-    color:#FFF;
+    color:white;
     padding:26px 5px 26px 5px;
+    font-size:1.1em;
+    //background: linear-gradient(bottom, blue, white);
+    //linear-gradient(135deg, orange, orange 60%, cyan);
+}
+
+.botaoPrincipal{
+    border: 1px #AFEEEE solid;
+    border-radius: 5px;
+    padding:26px 5px 26px 5px;
+    font-size:1.1em;
+    background-color: #AFEEEE; 
+    color: black;
+    font-weight: bold;
 }
 
 ion-content {
-    //background: #904779 !important;
+    background: #4682B4 !important;
     //background-repeat: no-repeat;
-    background-image: url('../assets/imgs/bkg_1.jpg');
-    background-position: center;
-    background-size: contain;
+    //background-image: url('../assets/imgs/bkg_1.jpg');
+    //background-position: center;
+    //background-size: contain;
+}
+
+.tabela{
+    width:100%;
+}
+
+.tabela tr{
+    background: rgba(0, 0, 0, 0); //deixa transparente
+}
+
+.tabela_td{
+    width:90%;
 }
 
 // ion-title {
@@ -27,7 +52,7 @@ ion-content {
 // }
 
 .bg-items {
-    background: rgba(0, 0, 0, 0);
+    background: rgba(0, 0, 0, 0); //deixa transparente
 }
 
 

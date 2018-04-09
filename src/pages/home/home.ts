@@ -15,18 +15,19 @@ import { AngularFireDatabase } from 'angularfire2/database';
 import { ValorKit } from '../../models/valorkit.models';
 import { ValorKitService } from '../../providers/valorKit/valorKit.service';
 
-
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
 })
 export class HomePage {
+  existeTarifaExcedente: boolean = false;  
   exibeResultado: boolean = false;
   sistemaSolarComercial = 0;
   numeroPaineis: number = 0;
   areaNecessaria: number = 0;
   investimentoAproximado: number = 0;
   tempoInvestimento: string;
+  valorTarifaExcedente: number;
 
   abvEstadoSelecionado: string = 'sc';
   estados: Observable<Estado[]>;
@@ -54,11 +55,21 @@ export class HomePage {
     this.valorKit = this.valorKitService.getAll();
   }
 
-  carregaCidades(): void {
+  verificaSeExisteTarifaExcedente(mediaKw): void{
+    if (this.abvEstadoSelecionado == 'sc' && mediaKw > 150){
+      this.existeTarifaExcedente = true;
+
+    } else{
+      this.existeTarifaExcedente = false;
+    }
+  }
+
+  carregaCidades(mediaKw): void {
+    this.cidades = this.cidadeService.getAll(this.estadoSelecionado);
+    this.abvEstadoSelecionado = this.estadoSelecionado.toLowerCase();
     this.cidadeSelecionada = null;
     this.currentCidade = null;
-    this.abvEstadoSelecionado = this.estadoSelecionado.toLowerCase();
-    this.cidades = this.cidadeService.getAll(this.estadoSelecionado);
+    this.verificaSeExisteTarifaExcedente(mediaKw);
   }
 
   mudaCidadeSelecionada(): void { 
@@ -108,35 +119,51 @@ export class HomePage {
   }
 
   ajudaMediaKw(): void {
-
-    this.presentInfoModal("Média KWh", `${this.abvEstadoSelecionado}/consumo_medio.jpg`, "Informe neste campo a média de consumo dos últimos 12 meses. Esta informação pode ser verificada na sua fatura de energia. Conforme destacado em vermelho na imagem.");
+    this.presentInfoModal("Média KWh", `${this.abvEstadoSelecionado}/consumo_medio.jpg`, "Informe neste campo a média de consumo dos últimos 12 meses. Esta informação pode ser verificada na sua fatura de energia. Conforme destacado na imagem.");
   }
 
   ajudaValorTarifa(): void {
-    this.presentInfoModal("Valor tarifa", `${this.abvEstadoSelecionado}/tarifa.jpg`, "Informe o valor da tarifa de energia em kwh. Esta informação pode ser verificada na sua fatura de energia. Conforme destacado em vermelho na imagem.");
+    this.presentInfoModal("Valor tarifa", `${this.abvEstadoSelecionado}/tarifa.jpg`, "Informe o valor da tarifa de energia em kwh. Esta informação pode ser verificada na sua fatura de energia. Conforme destacado na imagem.");
   }
 
   ajudaValorTarifaExcedente(): void {
-    if (this.abvEstadoSelecionado == 'SC')
-    {
-      this.presentInfoModal("Valor tarifa excedente", `${this.abvEstadoSelecionado}/tarifa_excedente.jpg`, "Algumas concencionárias de energia elétrica do Brasil trabalham com diferentes tarifas. Verifique na sua fatura se a concencionária da sua região possui mais de uma tarifa. Conforme destacado em vermelho na imagem.");
-    } else {
-      this.showAlert("Informação", "O estado selecionado não possui tarifa excedente!");
-    }
+    this.presentInfoModal("Valor tarifa excedente", `${this.abvEstadoSelecionado}/tarifa_excedente.jpg`, "Algumas concencionárias de energia elétrica do Brasil trabalham com diferentes tarifas. Verifique na sua fatura se a concencionária da sua região possui mais de uma tarifa. Conforme destacado na imagem.");
   }
   
-  Calcula(mediaKw, valorTarifa, valorTarifaExcedente, tipoRede):void {
+  Calcula(mediaKw, valorTarifa, tipoRede):void {
+    let validaMediakW = parseFloat(mediaKw);
+    let validaValorTarifa = parseFloat(valorTarifa);
 
-    if(this.estadoSelecionado == null 
-      ||this.cidadeSelecionada == null
-      ||mediaKw == ""
-      ||valorTarifa == ""
-      ||tipoRede == null)
-    {
-      this.showAlert("Ops!", "Informe todos os campos!");
+    let mensagemErro = "";
+
+    if (this.estadoSelecionado == null) { mensagemErro += "<br> - Estado"; }
+    if (this.cidadeSelecionada == null) { mensagemErro += "<br> - Cidade"; }
+    if (mediaKw == "" || validaMediakW <= 0) { mensagemErro += "<br> - Média KWh/mês"; }
+    if (valorTarifa == "" || validaValorTarifa <= 0) { mensagemErro += "<br> - Valor tarifa"; }
+    if (tipoRede == null) { mensagemErro += "<br> - Tipo da Rede"; }
+    if ((this.abvEstadoSelecionado == 'sc' && (validaMediakW > 150 && (this.valorTarifaExcedente == null || this.valorTarifaExcedente <= 0)))){
+      mensagemErro += "<br> - Valor tarifa excedente";
+    }
+
+    if (mensagemErro != "") {
+      this.showAlert("Informe todos os campos:", mensagemErro);
       return;
     }
 
+    //validar valores negativos, igual ao valorTarifaExcedente
+/*    if(this.estadoSelecionado == null 
+      || this.cidadeSelecionada == null
+      || validaMediakW <= 0
+      || validaValorTarifa <= 0
+      //|| mediaKw == "0"
+      //|| valorTarifa == ""
+      //|| valorTarifa == "0"
+      || tipoRede == null
+      || (this.abvEstadoSelecionado == 'sc' && (mediaKw > 150 && (this.valorTarifaExcedente == null || this.valorTarifaExcedente <= 0)))) {
+      this.showAlert("Ops!", "Informe todos os campos!");
+      return;
+    }
+*/
     let sistemaSolarIdeal = 0;
 	  
     let monofasico = 30;//diminui 30 kw da media antes de calcular o sistemaSolarIdeal 
@@ -166,10 +193,11 @@ export class HomePage {
     this.sistemaSolarComercial = (this.numeroPaineis * potenciaPainel) / 1000;
 
     let valorWatt = this.calculaValorWatt(this.sistemaSolarComercial);
+    if (valorWatt == 0) return; //não deve continuar o cálculo
 
     this.investimentoAproximado = (this.sistemaSolarComercial * 1000) * valorWatt;
 
-    let totalGeralTarifa = this.calculaTotalGeralTarifa(mediaKw, valorTarifa, valorTarifaExcedente);
+    let totalGeralTarifa = this.calculaTotalGeralTarifa(mediaKw, valorTarifa, this.valorTarifaExcedente);
     
     //ENCONTRA TAXA MINIMA 
 		var valorTaxaMinima = 0;
@@ -210,16 +238,12 @@ export class HomePage {
 
   /**
    * Calcula o valor médio do retorno do investimento
-   * @param investimentoAproximado 
-   * @param totalGeralTarifa 
-   * @param valorTaxaMinima 
    */
   calculaTempoMedioRetornoInvestimento(investimentoAproximado, totalGeralTarifa, valorTaxaMinima): string {
     let invest = investimentoAproximado;
 		let mes = 0;
 		let mediaFaturaMesComInflacao = totalGeralTarifa - valorTaxaMinima;
-		while(invest > 0)
-		{	
+		while(invest > 0){	
 			if (mes >= 12){
 				mediaFaturaMesComInflacao = mediaFaturaMesComInflacao * 1.008334;
 			}
@@ -236,7 +260,6 @@ export class HomePage {
     } else {
       tempoInvestimento = `${tempoEmAnos - decimalTempoEmAnos} anos`;
     }
-
     return tempoInvestimento;
   }
 
@@ -248,17 +271,13 @@ export class HomePage {
     let totalTarifa = 0;
 		let totalTarifaExcedente = 0;
 
-    //TODO: 'e diferente de zero ou maior que zero? esse valor pde ser negativo?
-		if (mediaKw > 150 && valorTarifaExcedente != 0)
-		{
+		if (mediaKw > 150 && valorTarifaExcedente > 0) {
 			totalTarifa = 150 * valorTarifa;
 			totalTarifaExcedente = (mediaKw - 150) * valorTarifaExcedente;
 		}
-		else
-		{
+		else {
 			totalTarifa = mediaKw * valorTarifa;
-		}
-		
+		}		
     return totalTarifa + totalTarifaExcedente;
   }
 
@@ -266,7 +285,7 @@ export class HomePage {
    * 		Se o numero de paineis for X.2 ou menos, arredonda pra baixo
    *    Se o numero de paineis for X.3 ou mais, arredonda pra cima
    */
-  calculaNumeroPaineis(sistemaSolarIdeal: number, potenciaPainel: number): number{
+  calculaNumeroPaineis(sistemaSolarIdeal: number, potenciaPainel: number): number {
     let numeroPaineis = sistemaSolarIdeal / (potenciaPainel / 1000);
     let decimalNumeroPaineis = numeroPaineis - Math.floor(numeroPaineis);
 
@@ -275,15 +294,11 @@ export class HomePage {
     } else {
       numeroPaineis = Math.floor(numeroPaineis);
     }
-
     return numeroPaineis;
   }
 
   /**
-    * se o sistemaSolarComercial for menor ou igual a 3.0 o valor do watt é R$ 6.8.
-    * se o sistemaSolarComercial for menor ou igual a 6.0 o valor do watt é R$ 5.
-    * se o sistemaSolarComercial for maior que 6.0 e menor que 30,0 o valor do watt é 3.8.
-    * se o sistemaSolarComercial for maior que 30.0 e menor que 55.0 o valor do watt é 3,5.
+    * Calcula o valor do watt baseando-se nos valores cadastrados pelo app Gerenciador KS
     */	
   calculaValorWatt(sistemaSolarComercial:number): number{
     let valorWatt = "5"; //default
@@ -291,6 +306,7 @@ export class HomePage {
     if (sistemaSolarComercial > 75)
     {
       this.showAlert("Alerta", "Para sistemas em alta tensão e com uma maior demanda é necessário uma análise técnica para o dimensionamento do seu gerador solar. Entre em contato com a KS para uma avaliação gratuita.");
+      return 0;
     }
 
 		if (sistemaSolarComercial <= 5) {
@@ -337,8 +353,7 @@ export class HomePage {
 		}
 		else if (sistemaSolarComercial <= 75)	{
 			valorWatt = this.valorKitService.listaValorKits.filter(x => x.$key == "de70a75")[0].valor
-    }
-        
+    }        
     return parseFloat(valorWatt);
   }
 

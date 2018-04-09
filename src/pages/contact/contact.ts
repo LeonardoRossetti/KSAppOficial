@@ -62,7 +62,7 @@ export class ContactPage {
                 <br><br> 
                 <strong>DADOS DO CÁLCULO: </strong>
                 <br>
-                <strong>Sistema solar fotovoltaico: </strong>${this.sistemaSolarComercial}kw
+                <strong>Sistema solar fotovoltaico: </strong>${this.sistemaSolarComercial}kWp
                 <br><br>
                 <strong>Número de painéis: </strong>${this.numeroPaineis}
                 <br><br>

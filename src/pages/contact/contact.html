@@ -2,7 +2,7 @@
   <custom-header title="Contato"></custom-header>
 </ion-header>
 
-<ion-content>
+<ion-content padding>
   <ion-list>
     
       <ion-item class="bg-items">
@@ -37,16 +37,16 @@
       </ion-item>
       <br>
       <br>
-      <h3 style="color:white;">Você pode anexar uma foto da fatura:</h3>
-      <table style="width:100%;">
+      <h5 style="color:white;">Você pode anexar uma foto da fatura:</h5>
+      <table class="tabela">
         <tr>
           <td>
             <button ion-button clear full class="botao" icon-left (click)="captureImage()">
               <ion-icon class="icon-bigger" name="images"></ion-icon>
-              Imagem da galeria
+              Galeria
             </button>
           </td>
-          <td>
+          <td style="padding-left:5px;">
             <button ion-button clear full class="botao" icon-left (click)="captureFoto()">
               <ion-icon class="icon-bigger" name="camera"></ion-icon>
               Tire uma foto
@@ -55,7 +55,7 @@
         </tr>
       </table>
       <br>
-      <button ion-button clear full class="botao" style="background-color: #FFF; color: black;" icon-left (click)="sendEmail(nome.value, email.value, telefone.value, mensagem.value)">
+      <button ion-button clear full class="botaoPrincipal" icon-left (click)="sendEmail(nome.value, email.value, telefone.value, mensagem.value)">
         <ion-icon class="icon-bigger" name="mail"></ion-icon>
         Enviar e-mail
       </button>
