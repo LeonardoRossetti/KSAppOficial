@@ -147,23 +147,10 @@ export class HomePage {
 
     if (mensagemErro != "") {
       this.showAlert("Informe todos os campos:", mensagemErro);
+      this.exibeResultado = false;
       return;
     }
 
-    //validar valores negativos, igual ao valorTarifaExcedente
-/*    if(this.estadoSelecionado == null 
-      || this.cidadeSelecionada == null
-      || validaMediakW <= 0
-      || validaValorTarifa <= 0
-      //|| mediaKw == "0"
-      //|| valorTarifa == ""
-      //|| valorTarifa == "0"
-      || tipoRede == null
-      || (this.abvEstadoSelecionado == 'sc' && (mediaKw > 150 && (this.valorTarifaExcedente == null || this.valorTarifaExcedente <= 0)))) {
-      this.showAlert("Ops!", "Informe todos os campos!");
-      return;
-    }
-*/
     let sistemaSolarIdeal = 0;
 	  
     let monofasico = 30;//diminui 30 kw da media antes de calcular o sistemaSolarIdeal 
@@ -177,7 +164,7 @@ export class HomePage {
         tipoRedeValor = bifasico; break;
       case ("trifasico"):
         tipoRedeValor = trifasico; break;
-      default:
+      case ("monofasico"):
         tipoRedeValor = monofasico; break;
     }
 
