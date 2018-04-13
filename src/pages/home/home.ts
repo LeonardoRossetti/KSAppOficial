@@ -15,6 +15,8 @@ import { AngularFireDatabase } from 'angularfire2/database';
 import { ValorKit } from '../../models/valorkit.models';
 import { ValorKitService } from '../../providers/valorKit/valorKit.service';
 
+import * as $ from 'jquery';
+
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
@@ -203,8 +205,46 @@ export class HomePage {
     this.investimentoAproximado = Math.round(this.investimentoAproximado);
 
     this.exibeResultado = true;
+    
+
+
     //Abre modal para exibir os resultados
     //this.presentResultModal("Resultado", sistemaSolarComercial, numeroPaineis, `${areaNecessaria}m²`, `${Math.round(investimentoAproximado)}`, tempoInvestimento);
+  }
+
+  teste(){
+    // var $doc = $('ion-content');
+    // $doc.animate({
+    //     scrollTop: top
+    // }, 500);
+
+    // var body = $("html, body");
+    // body.stop().animate({scrollTop:0}, 500, 'swing', function() { 
+    //   alert("Finished animating");
+    // });
+
+    // $('body,html').animate({
+    //       scrollTop: 510
+    // }, 800);
+
+//     if (navigator.userAgent.match(/(iPod|iPhone|iPad|Android)/)) {           
+//       window.scrollTo(200,100) // first value for left offset, second value for top offset
+// }else{
+//       $('html,body').animate({
+//           scrollTop: 100,
+//           scrollLeft: 200
+//       }, 800, function(){
+//           $('html,body').clearQueue();
+//       });
+//}
+
+  //$('ion-content').animate({top: '100px'}, 500);
+
+  //$('html, body').animate({scrollTop: $('ion-content').offset().top + 200}, 100);
+
+  //$('ion-content').animate({bottom:'300'}, 500);
+
+    console.log('passou');
   }
 
   Contato():void {

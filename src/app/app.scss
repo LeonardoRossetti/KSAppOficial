@@ -1,36 +1,105 @@
 //Global Css
 
-.icon-bigger {
-    font-size:1.8em;
+@font-face {
+    font-family: kenyan_coffe_rg;
+    font-style: normal;
+    font-weight: normal;
+    src: url('../assets/font/kenyan_coffee/kenyan_coffee_rg.ttf');
 }
 
-.botao {
-    border: 1px #AFEEEE solid;
-    border-radius: 5px;
-    color:white;
-    padding:26px 5px 26px 5px;
-    font-size:1.1em;
-    //background: linear-gradient(bottom, blue, white);
-    //linear-gradient(135deg, orange, orange 60%, cyan);
-}
-
-.botaoPrincipal{
-    border: 1px #AFEEEE solid;
-    border-radius: 5px;
-    padding:26px 5px 26px 5px;
-    font-size:1.1em;
-    background-color: #AFEEEE; 
-    color: black;
-    font-weight: bold;
+@font-face {
+    font-family: engravers_gothic_bt;
+    font-style: normal;
+    font-weight: normal;
+    src: url('../assets/font/engravers_gothic_bt/engravers_gothic_bt.ttf');
 }
 
 ion-content {
-    background: #4682B4 !important;
+    background: #8CB0D0 !important;
+    font-family: engravers_gothic_bt;
+    letter-spacing:1px;
     //background-repeat: no-repeat;
     //background-image: url('../assets/imgs/bkg_1.jpg');
     //background-position: center;
     //background-size: contain;
 }
+
+ion-input, ion-label, ion-select, textarea {
+    font-size: 21px;
+    letter-spacing: 0.1px;
+}
+
+.icon-bigger {
+    font-size:1.8em;
+}
+
+
+.botaoAjuda {
+    border: 1px #AFEEEE solid;
+    color:white;
+    border-radius: 4px;
+    padding:20px 0px 17px 5px;
+    font-size:1em;
+    background-color:#5E8AAF;
+    border-bottom: 3px #565A5C solid;
+    border-right: 3px #565A5C solid;
+    //border-right: 8px black solid;
+    //background: linear-gradient(bottom, blue, white);
+    //linear-gradient(135deg, orange, orange 60%, cyan);
+}
+    
+//classe do icone dentro do botão
+.iconAjuda{    
+    float:right;
+    background-color:#676767;    
+    padding: 12px 6px 13px 6px; 
+    margin-left:5px;
+    font-size: 1.8em;
+}
+
+.rodape{
+    position: fixed;
+    margin-left:-15px;
+    bottom:0px;
+    z-index: -1;
+}
+
+.botaoPrincipal {
+    width:75%; 
+    background-color: Transparent; 
+    margin-left:12.5%;
+}
+
+.botao {
+    background-color: Transparent; 
+}
+
+// .botao {
+//     border: 1px #AFEEEE solid;
+//     border-radius: 5px;
+//     color:white;
+//     padding:22px 5px 22px 5px;
+//     font-size:15px;
+//     background-color: #5E8AAF;
+//     //background: linear-gradient(bottom, blue, white);
+//     //linear-gradient(135deg, orange, orange 60%, cyan);
+// }
+
+// .botaoPrincipal{
+//     border: 1px #AFEEEE solid;
+//     border-radius: 5px;
+//     font-size:17px;
+//     padding:26px 5px 26px 5px;
+//     background-color: #AFEEEE; 
+//     color: black;
+// }
+
+
+
+//deixa primeira letra maior
+// ion-label::first-letter {
+// 	font-size:21px;
+// }
 
 .tabela{
     width:100%;

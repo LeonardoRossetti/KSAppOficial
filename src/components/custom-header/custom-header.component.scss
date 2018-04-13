@@ -6,12 +6,19 @@ custom-header {
     
     .title {
         text-align: center;
+        font-family: kenyan_coffe_rg;
     }
     
     .title span {
+        font-size: 34px;
         position: absolute;
         top: 50%;
         left: 30%;
         transform: translateX(-50%) translateY(-50%);
+    }
+
+    .testeNav{
+        width:98%;
+        margin-top:-3.5px;
     }
 }

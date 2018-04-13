@@ -1,15 +1,17 @@
 <ion-header>
+  <img src="assets/faixa_superior.png">
   <custom-header title="Calculadora Solar"></custom-header>
 </ion-header>
 
 <ion-content padding>
   <ion-list>
+    <br>
     <ion-item class="itemSelect">
       <ion-label color="light">Estado</ion-label>
-      <ion-select [(ngModel)]="estadoSelecionado" (ionChange)="carregaCidades(mediaKw.value);" cancelText="Cancelar" okText="OK">
-        <ion-option *ngFor="let estado of estados | async" value="{{estado.$key}}">{{estado.nome}}</ion-option>
+      <ion-select class="selector" [(ngModel)]="estadoSelecionado" (ionChange)="carregaCidades(mediaKw.value);" cancelText="Cancelar" okText="OK">
+        <ion-option  class="option" *ngFor="let estado of estados | async" value="{{estado.$key}}">{{estado.nome}}</ion-option>
       </ion-select>
-    </ion-item>
+    </ion-item> 
     <br>
     <ion-item class="itemSelect">
       <ion-label color="light">Cidade</ion-label>
@@ -22,15 +24,15 @@
       <tr>
         <td class="tabela_td">
           <ion-item class="itens">
-            <ion-label color="light" floating>Média KWh/mês</ion-label>
+            <ion-label color="light" floating>Média kW/mês</ion-label>
             <ion-input type="number" maxlength="10" (ionChange)="verificaSeExisteTarifaExcedente(mediaKw.value)" #mediaKw>
             </ion-input>
           </ion-item>
         </td>
         <td>
-          <button ion-button clear class="botao" icon-right (click)="ajudaMediaKw()">
+          <button ion-button clear class="botaoAjuda" icon-right (click)="ajudaMediaKw()">
             Onde encontrar
-            <ion-icon class="icon-bigger" ios="ios-information-circle" md="md-help"></ion-icon>
+            <ion-icon class="iconAjuda" ios="search" md="md-search"></ion-icon>
           </button>
         </td>
       </tr>
@@ -43,9 +45,9 @@
           </ion-item>
         </td>
         <td>
-          <button ion-button clear class="botao" icon-right (click)="ajudaValorTarifa()">
+          <button ion-button clear class="botaoAjuda" icon-right (click)="ajudaValorTarifa()">
             Onde encontrar
-            <ion-icon class="icon-bigger" ios="ios-information-circle" md="md-help"></ion-icon>
+            <ion-icon class="iconAjuda" ios="search" md="md-search"></ion-icon>
           </button>
         </td>
       </tr>
@@ -53,14 +55,14 @@
       <tr *ngIf="existeTarifaExcedente">
         <td class="tabela_td">
           <ion-item class="itens">
-            <ion-label color="light" floating>Tarifa excedente</ion-label>
+            <ion-label color="light" floating>Tar. excedente</ion-label>
             <ion-input type="number" maxlength="10" [(ngModel)]="valorTarifaExcedente"></ion-input>
           </ion-item>
         </td>
         <td>
-          <button ion-button clear class="botao" icon-right (click)="ajudaValorTarifaExcedente()">
+          <button ion-button clear class="botaoAjuda" icon-right (click)="ajudaValorTarifaExcedente()">
             Onde encontrar
-            <ion-icon class="icon-bigger" ios="ios-information-circle" md="md-help"></ion-icon>
+            <ion-icon class="iconAjuda" ios="search" md="md-search"></ion-icon>
           </button>
         </td>
     </tr>
@@ -75,33 +77,43 @@
       </ion-select>
     </ion-item>
 <br>
-<button ion-button clear full class="botaoPrincipal" icon-left 
+<!-- <button ion-button clear full class="botaoPrincipal" icon-left 
   (click)="Calcula(mediaKw.value, valorTarifa.value, tipoRede)">
   <ion-icon class="icon-bigger" name="calculator"></ion-icon>
   Calcular
+</button> -->
+
+<button class="botaoPrincipal" (click)="Calcula(mediaKw.value, valorTarifa.value, tipoRede)">
+  <img src="assets/btn_calcular.png">
 </button>
 
 <div *ngIf="exibeResultado" id="resultado">
-  <h3>Resultado: </h3><br>
-  <label class="textoLabel">Sistema solar fotovoltaico: </label> <label>{{sistemaSolarComercial}}kWp</label><br><br>
-  <label class="textoLabel">Número de painéis: </label> <label>{{numeroPaineis}}</label><br><br>
-  <label class="textoLabel">Área necessária: </label> <label>{{areaNecessaria}}m²</label><br><br>
-  <label class="textoLabel">Investimento aproximado: </label> <label>{{investimentoAproximado | moeda }}</label> <br><br>
+  <h3>Resultado:</h3>
+  <label class="textoLabel">Sistema solar fotovoltaico: </label> <label>{{sistemaSolarComercial}}kWp</label><hr>
+  <label class="textoLabel">Número de painéis: </label> <label>{{numeroPaineis}}</label><hr>
+  <label class="textoLabel">Área necessária: </label> <label>{{areaNecessaria}}m²</label><hr>
+  <label class="textoLabel">Investimento aproximado: </label> <label>{{investimentoAproximado | moeda }}</label><hr>
   <label class="textoLabel">Retorno do investimento: </label> <label>{{tempoInvestimento}}</label>
 </div>
-
+<br><br>
 <table class="tabela">
   <tr>
     <td style="padding-right:5px;">
-      <button ion-button clear full class="botao" icon-left (click)="Contato()">
+      <!-- <button ion-button clear full class="botao" icon-left (click)="Contato()">
         <ion-icon class="icon-bigger" name="mail"></ion-icon>
         Fale conosco
+      </button> -->
+      <button class="botao" (click)="Contato()">
+          <img src="assets/btn_fale_conosco.png">
       </button>
     </td>
     <td>
-      <button ion-button clear full class="botao"  icon-left (click)="Sobre()">
+      <!-- <button ion-button clear full class="botao" icon-left (click)="Sobre()">
         <ion-icon class="icon-bigger" name="information-circle"></ion-icon>
         Sobre
+      </button> -->
+      <button class="botao" (click)="Sobre()">
+          <img src="assets/btn_sobre.png">
       </button>
     </td>
   </tr>
@@ -114,5 +126,10 @@
       <ion-label>{{kit.nome}}</ion-label>
     </ion-item>
   </div>
+<br>
+  <div class="rodape">
+    <img src="assets/faixa_inferior.png">
+  </div>
+
 </ion-list>
 </ion-content>
