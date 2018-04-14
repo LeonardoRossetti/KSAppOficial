@@ -5,7 +5,15 @@
 
 <ion-content padding>
   <ion-list>
-    <br>
+
+  <div>
+    <!-- Feito isso pq estava ficando carregando eternamente o loading do carregar valor kit se nao tivesse uma chamada
+    pra ele na tela. Não sei ainda o pq isso acontece! -->
+    <ion-item style="visibility: hidden; position:absolute;" *ngFor="let kit of valorKit | async">
+      <ion-label>{{kit.nome}}</ion-label>
+    </ion-item>
+  </div>
+      
     <ion-item class="itemSelect">
       <ion-label color="light">Estado</ion-label>
       <ion-select class="selector" [(ngModel)]="estadoSelecionado" (ionChange)="carregaCidades(mediaKw.value);" cancelText="Cancelar" okText="OK">
@@ -19,47 +27,45 @@
         <ion-option *ngFor="let cidade of cidades | async" value="{{cidade.$key}}">{{cidade.nome}}</ion-option>
       </ion-select>
     </ion-item>
-    <br>
+
     <table class="tabela">
       <tr>
         <td class="tabela_td">
-          <ion-item class="itens">
+          <ion-item no-lines class="itens">
             <ion-label color="light" floating>Média kW/mês</ion-label>
             <ion-input type="number" maxlength="10" (ionChange)="verificaSeExisteTarifaExcedente(mediaKw.value)" #mediaKw>
             </ion-input>
           </ion-item>
         </td>
-        <td>
+        <td valign="bottom">
           <button ion-button clear class="botaoAjuda" icon-right (click)="ajudaMediaKw()">
             Onde encontrar
             <ion-icon class="iconAjuda" ios="search" md="md-search"></ion-icon>
           </button>
         </td>
       </tr>
-      <br>
       <tr>
         <td class="tabela_td">
-          <ion-item class="itens">
+          <ion-item no-lines class="itens">
             <ion-label color="light" floating>Valor tarifa</ion-label>
             <ion-input type="number" #valorTarifa></ion-input>
           </ion-item>
         </td>
-        <td>
+        <td valign="bottom">
           <button ion-button clear class="botaoAjuda" icon-right (click)="ajudaValorTarifa()">
             Onde encontrar
             <ion-icon class="iconAjuda" ios="search" md="md-search"></ion-icon>
           </button>
         </td>
       </tr>
-      <br>
       <tr *ngIf="existeTarifaExcedente">
         <td class="tabela_td">
-          <ion-item class="itens">
-            <ion-label color="light" floating>Tar. excedente</ion-label>
+          <ion-item no-lines class="itens">
+            <ion-label color="light" floating>Tarifa excedente</ion-label>
             <ion-input type="number" maxlength="10" [(ngModel)]="valorTarifaExcedente"></ion-input>
           </ion-item>
         </td>
-        <td>
+        <td valign="bottom">
           <button ion-button clear class="botaoAjuda" icon-right (click)="ajudaValorTarifaExcedente()">
             Onde encontrar
             <ion-icon class="iconAjuda" ios="search" md="md-search"></ion-icon>
@@ -83,6 +89,7 @@
   Calcular
 </button> -->
 
+<div class="rodape">
 <button class="botaoPrincipal" (click)="Calcula(mediaKw.value, valorTarifa.value, tipoRede)">
   <img src="assets/btn_calcular.png">
 </button>
@@ -119,15 +126,6 @@
   </tr>
 </table>
 
-<div>
-  <!-- Feito isso pq estava ficando carregando eternamente o loading do carregar valor kit se nao tivesse uma chamada
-  pra ele na tela. Não sei ainda o pq isso acontece! -->
-    <ion-item style="visibility: hidden; position:absolute;" *ngFor="let kit of valorKit | async">
-      <ion-label>{{kit.nome}}</ion-label>
-    </ion-item>
-  </div>
-<br>
-  <div class="rodape">
     <img src="assets/faixa_inferior.png">
   </div>
 

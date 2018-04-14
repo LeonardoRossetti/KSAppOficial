@@ -20,13 +20,15 @@ page-home {
     }
 
     .itens{
-        background: rgba(0, 0, 0, 0); //deixa transparente
-    }
-    
-    .itemSelect{
-        margin-left:-10px;
+        margin:-5px 0 -5px 0px;
+        padding:0;
         background: rgba(0, 0, 0, 0); //deixa transparente
     }
 
+    .itemSelect{
+        margin:-5px 0 -5px 0;
+        margin-left:-15px;
+        background: rgba(0, 0, 0, 0); //deixa transparente
+    }
     
 }

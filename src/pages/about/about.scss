@@ -1,9 +1,17 @@
 page-about {
     .sobre{
         font-size: 18px;
+        margin-top:-12px;
+        text-align: justify;
     }
 
     .sobre p{
         color:#fff;
+    }
+    
+    .sobre ul{
+        color:#fff;
+        //text-align: left;
+        margin-left: -23px;
     }
 }

@@ -18,6 +18,8 @@ ion-content {
     background: #8CB0D0 !important;
     font-family: engravers_gothic_bt;
     letter-spacing:1px;
+    padding:0;
+    margin-bottom:0;
     //background-repeat: no-repeat;
     //background-image: url('../assets/imgs/bkg_1.jpg');
     //background-position: center;
@@ -49,18 +51,20 @@ ion-input, ion-label, ion-select, textarea {
 }
     
 //classe do icone dentro do botão
-.iconAjuda{    
+.iconAjuda {    
     float:right;
-    background-color:#676767;    
-    padding: 12px 6px 13px 6px; 
+    background-color:#676767;
+    padding: 12px 2px 13px 0px; 
     margin-left:5px;
     font-size: 1.8em;
 }
 
-.rodape{
-    position: fixed;
+.rodape {
+    position:absolute;
+    //bottom:0;
     margin-left:-15px;
-    bottom:0px;
+    //padding-bottom:-50px;
+    bottom:0; 
     z-index: -1;
 }
 
