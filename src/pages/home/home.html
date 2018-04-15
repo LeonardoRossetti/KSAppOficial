@@ -82,52 +82,52 @@
         <ion-option value="bifasico">Bifasico</ion-option>
       </ion-select>
     </ion-item>
-<br>
+  <br>
 <!-- <button ion-button clear full class="botaoPrincipal" icon-left 
   (click)="Calcula(mediaKw.value, valorTarifa.value, tipoRede)">
   <ion-icon class="icon-bigger" name="calculator"></ion-icon>
   Calcular
 </button> -->
 
-<div class="rodape">
-<button class="botaoPrincipal" (click)="Calcula(mediaKw.value, valorTarifa.value, tipoRede)">
-  <img src="assets/btn_calcular.png">
-</button>
+  <div style="position:absolute; bottom:38px; margin-left:-15px;">
+    <button class="botaoPrincipal" (click)="Calcula(mediaKw.value, valorTarifa.value, tipoRede)">
+      <img src="assets/btn_calcular.png">
+    </button>
 
-<div *ngIf="exibeResultado" id="resultado">
-  <h3>Resultado:</h3>
-  <label class="textoLabel">Sistema solar fotovoltaico: </label> <label>{{sistemaSolarComercial}}kWp</label><hr>
-  <label class="textoLabel">Número de painéis: </label> <label>{{numeroPaineis}}</label><hr>
-  <label class="textoLabel">Área necessária: </label> <label>{{areaNecessaria}}m²</label><hr>
-  <label class="textoLabel">Investimento aproximado: </label> <label>{{investimentoAproximado | moeda }}</label><hr>
-  <label class="textoLabel">Retorno do investimento: </label> <label>{{tempoInvestimento}}</label>
-</div>
-<br><br>
-<table class="tabela">
-  <tr>
-    <td style="padding-right:5px;">
-      <!-- <button ion-button clear full class="botao" icon-left (click)="Contato()">
-        <ion-icon class="icon-bigger" name="mail"></ion-icon>
-        Fale conosco
-      </button> -->
-      <button class="botao" (click)="Contato()">
-          <img src="assets/btn_fale_conosco.png">
-      </button>
-    </td>
-    <td>
-      <!-- <button ion-button clear full class="botao" icon-left (click)="Sobre()">
-        <ion-icon class="icon-bigger" name="information-circle"></ion-icon>
-        Sobre
-      </button> -->
-      <button class="botao" (click)="Sobre()">
-          <img src="assets/btn_sobre.png">
-      </button>
-    </td>
-  </tr>
-</table>
-
+    <div *ngIf="exibeResultado" id="resultado">
+      <h3>Resultado:</h3>
+      <label class="textoLabel">Sistema solar fotovoltaico: </label> <label>{{sistemaSolarComercial}}kWp</label><hr>
+      <label class="textoLabel">Número de painéis: </label> <label>{{numeroPaineis}}</label><hr>
+      <label class="textoLabel">Área necessária: </label> <label>{{areaNecessaria}}m²</label><hr>
+      <label class="textoLabel">Investimento aproximado: </label> <label>{{investimentoAproximado | moeda }}</label><hr>
+      <label class="textoLabel">Retorno do investimento: </label> <label>{{tempoInvestimento}}</label>
+    </div>
+    <br>
+    <table class="tabela">
+      <tr>
+        <td style="padding-right:5px;">
+          <!-- <button ion-button clear full class="botao" icon-left (click)="Contato()">
+            <ion-icon class="icon-bigger" name="mail"></ion-icon>
+            Fale conosco
+          </button> -->
+          <button class="botao" (click)="Contato()">
+              <img src="assets/btn_fale_conosco.png">
+          </button>
+        </td>
+        <td>
+          <!-- <button ion-button clear full class="botao" icon-left (click)="Sobre()">
+            <ion-icon class="icon-bigger" name="information-circle"></ion-icon>
+            Sobre
+          </button> -->
+          <button class="botao" (click)="Sobre()">
+              <img src="assets/btn_sobre.png">
+          </button>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div class="rodape">
     <img src="assets/faixa_inferior.png">
   </div>
-
 </ion-list>
 </ion-content>

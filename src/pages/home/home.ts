@@ -15,7 +15,7 @@ import { AngularFireDatabase } from 'angularfire2/database';
 import { ValorKit } from '../../models/valorkit.models';
 import { ValorKitService } from '../../providers/valorKit/valorKit.service';
 
-import * as $ from 'jquery';
+//import * as $ from 'jquery';
 
 @Component({
   selector: 'page-home',
