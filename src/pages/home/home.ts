@@ -181,6 +181,11 @@ export class HomePage {
     this.areaNecessaria = this.numeroPaineis * 2;
     this.sistemaSolarComercial = (this.numeroPaineis * potenciaPainel) / 1000;
 
+    if (this.sistemaSolarComercial < 1){
+      this.showAlert("Alerta", "Para sistemas com menos de 1kWp é necessário uma análise técnica para o dimensionamento do seu gerador solar. Entre em contato com a KS para uma avaliação gratuita.");
+      return;
+    }
+
     let valorWatt = this.calculaValorWatt(this.sistemaSolarComercial);
     if (valorWatt == 0) return; //não deve continuar o cálculo
 

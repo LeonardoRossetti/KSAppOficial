@@ -7,7 +7,7 @@
   <ion-list>
       <ion-item class="itens">
         <ion-label color="light" floating>
-            <ion-icon class="icon-bigger" name="person"></ion-icon>
+            <ion-icon name="person"></ion-icon>
             Nome
         </ion-label>
         <ion-input type="text" #nome></ion-input>
@@ -15,7 +15,7 @@
 
       <ion-item class="itens">
         <ion-label color="light" floating>
-            <ion-icon class="icon-bigger" name="mail"></ion-icon>
+            <ion-icon name="mail"></ion-icon>
             E-mail
         </ion-label>
         <ion-input type="text" #email></ion-input>
@@ -23,17 +23,18 @@
 
       <ion-item class="itens">
         <ion-label color="light" floating>
-            <ion-icon class="icon-bigger" name="call"></ion-icon>
+            <ion-icon name="call"></ion-icon>
             Telefone
         </ion-label>
         <ion-input type="number" #telefone></ion-input>
       </ion-item>
+
       <ion-item class="itens">
         <ion-label color="light" floating>
-            <ion-icon class="icon-bigger" name="text"></ion-icon>
+            <ion-icon name="text"></ion-icon>
             Mensagem (500)
         </ion-label>
-        <ion-textarea #mensagem rows="3" maxLength="500"></ion-textarea>
+        <ion-textarea #mensagem rows="2" maxLength="500"></ion-textarea>
       </ion-item>
       
       <h4 style="color:white; letter-spacing: 0px;">Você pode anexar uma foto da fatura:</h4>
@@ -41,7 +42,7 @@
         <tr>
           <td>
             <!-- <button ion-button clear full class="botao" icon-left (click)="captureImage()">
-              <ion-icon class="icon-bigger" name="images"></ion-icon>
+              <ion-icon name="images"></ion-icon>
               Galeria
             </button> -->
             <button (click)="captureImage()" class="botao">
@@ -50,7 +51,7 @@
           </td>
           <td style="padding-left:5px;">
             <!-- <button ion-button clear full class="botao" icon-left (click)="captureFoto()">
-              <ion-icon class="icon-bigger" name="camera"></ion-icon>
+              <ion-icon name="camera"></ion-icon>
               Tire uma foto
             </button> -->
             <button (click)="captureFoto()" class="botao">
@@ -60,15 +61,15 @@
         </tr>
       </table>
       <!-- <button ion-button clear full class="botaoPrincipal" icon-left (click)="sendEmail(nome.value, email.value, telefone.value, mensagem.value)">
-        <ion-icon class="icon-bigger" name="mail"></ion-icon>
+        <ion-icon name="mail"></ion-icon>
         Enviar e-mail
       </button> -->
       <button (click)="sendEmail()" class="botaoPrincipal">
         <img src="assets/btn_enviar_email.png">
       </button>
       <br>
-      <div class="rodape">
-        <img src="assets/faixa_inferior.png">
-      </div>
-  </ion-list>
+    </ion-list>
+    <div class="rodape">
+      <img src="assets/faixa_inferior.png">
+    </div>
 </ion-content>
