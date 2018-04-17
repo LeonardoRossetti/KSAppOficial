@@ -1,0 +1,13 @@
+page-select-search {
+    .select-search-page {
+        &.select-search-page-can-reset.select-search-page-multiple {
+            .footer .col:first-child {
+                padding-right: $content-margin / 2;
+            }
+            
+            .footer .col:last-child {
+                padding-left: $content-margin / 2;
+            }
+        }
+    }
+}

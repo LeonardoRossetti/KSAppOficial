@@ -38,7 +38,7 @@ export class ValorKitService extends BaseService {
       loading.dismiss();
       return valorKits;
     });
-
+    
     return this.ValorKits;
   }
 

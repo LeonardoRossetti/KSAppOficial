@@ -1,3 +1,6 @@
+import { Estado } from './../models/estados.models';
+import { SelectSearchPage } from './../pages/select-search/select-search';
+import { SelectSearch } from './../components/select-search/select-search';
 import { BrowserModule } from '@angular/platform-browser';
 import { Camera } from '@ionic-native/camera';
 import { EmailComposer } from '@ionic-native/email-composer';
@@ -43,6 +46,8 @@ const firebaseAppConfig: FirebaseAppConfig = {
     InfoComponent,
     MoedaPipe,
     MyApp,
+    SelectSearch,
+    SelectSearchPage,
     ResultComponent,
     TabsPage
   ],
@@ -62,6 +67,8 @@ const firebaseAppConfig: FirebaseAppConfig = {
     InfoComponent,
     MyApp,
     ResultComponent,
+    SelectSearch,
+    SelectSearchPage,
     TabsPage
   ],
   providers: [

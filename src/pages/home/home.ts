@@ -1,10 +1,9 @@
 import { AboutPage } from './../about/about';
 import { ContactPage } from './../contact/contact';
 import { Component } from '@angular/core';
-import { NavController, AlertController, ModalController, LoadingController } from 'ionic-angular';
+import { NavController, AlertController, ModalController, LoadingController, Loading } from 'ionic-angular';
 
 import { InfoComponent } from './../../components/info/info';
-import { ResultComponent } from './../../components/result/result';
 
 import { Cidade } from '../../models/cidades.models';
 import { CidadeService } from '../../providers/cidade/cidade.service';
@@ -14,6 +13,7 @@ import { Observable } from 'rxjs/Observable';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { ValorKit } from '../../models/valorkit.models';
 import { ValorKitService } from '../../providers/valorKit/valorKit.service';
+import { SelectSearch } from '../../components/select-search/select-search';
 
 //import * as $ from 'jquery';
 
@@ -22,6 +22,9 @@ import { ValorKitService } from '../../providers/valorKit/valorKit.service';
   templateUrl: 'home.html'
 })
 export class HomePage {
+  cidadesArray: Cidade[];
+  _cidadeSelecionada: Cidade;
+
   existeTarifaExcedente: boolean = false;  
   exibeResultado: boolean = false;
   sistemaSolarComercial = 0;
@@ -29,6 +32,7 @@ export class HomePage {
   areaNecessaria: number = 0;
   investimentoAproximado: number = 0;
   tempoInvestimento: string;
+  economiaPeriodo: number;
   valorTarifaExcedente: number;
 
   abvEstadoSelecionado: string = 'sc';
@@ -66,13 +70,52 @@ export class HomePage {
     }
   }
 
+  private showLoading(): Loading {
+    let loading: Loading = this.loadingCtrl.create({
+      content: 'Carregando cidades...'
+    });
+
+    loading.present();
+    return loading;
+  }
+
+  /**
+   * Click do componente de cidades
+   */
+  carregaCidadesArray() {
+    let loading: Loading = this.showLoading();
+
+    if (this.cidadeService.listaCidades != null){
+      this.cidadesArray = this.cidadeService.listaCidades;     
+    }
+
+    setTimeout(()=>{
+      loading.dismiss();
+    },900);
+  }
+
   carregaCidades(mediaKw): void {
     this.cidades = this.cidadeService.getAll(this.estadoSelecionado);
     this.abvEstadoSelecionado = this.estadoSelecionado.toLowerCase();
     this.cidadeSelecionada = null;
     this.currentCidade = null;
+    this._cidadeSelecionada = null;
     this.verificaSeExisteTarifaExcedente(mediaKw);
+
+    //até passar a usar a base de dados local é necessário deixar esse load para impedir o usuario
+    //de abrir o modal de ciades sem nenhuma cidade carregada
+    let loading: Loading = this.showLoading();
+    setTimeout(()=>{
+      loading.dismiss();
+    },1900);
   }
+
+  cidadeChange(event: { component: SelectSearch, value: any }) {   
+    this.currentCidade = new Cidade(event.value.nome, event.value.radiacao);
+    this.cidadeSelecionada = event.value.$key;
+    this.radiacaoCidade = parseFloat(this.currentCidade.radiacao);
+  }
+
 
   mudaCidadeSelecionada(): void { 
     //ao mudar o estado selecionado nao existe cidade selecionada
@@ -86,7 +129,6 @@ export class HomePage {
   }
 
   ajudaTeste(caminho){
-    console.log(caminho);
     let infoModal = this.modalCtrl.create(InfoComponent, { title: 'title', text: 'text', img: caminho });
     infoModal.onDidDismiss(data => {
 //      console.log(data);
@@ -104,21 +146,21 @@ export class HomePage {
   }
 
   /** Abre o modal de resultado */
-  presentResultModal(title, sistemaSolarComercial, numeroPaineis, areaNecessaria, investimentoAproximado, tempoInvestimento) {
-    let resultModal = this.modalCtrl.create(ResultComponent, 
-      { 
-        title: title, 
-        sistemaSolarComercial: sistemaSolarComercial, 
-        numeroPaineis: numeroPaineis,
-        areaNecessaria: areaNecessaria,
-        investimentoAproximado: investimentoAproximado,
-        tempoInvestimento: tempoInvestimento
-       });
-       resultModal.onDidDismiss(data => {
-      //console.log(data);
-    });
-    resultModal.present();
-  }
+  // presentResultModal(title, sistemaSolarComercial, numeroPaineis, areaNecessaria, investimentoAproximado, tempoInvestimento) {
+  //   let resultModal = this.modalCtrl.create(ResultComponent, 
+  //     { 
+  //       title: title, 
+  //       sistemaSolarComercial: sistemaSolarComercial, 
+  //       numeroPaineis: numeroPaineis,
+  //       areaNecessaria: areaNecessaria,
+  //       investimentoAproximado: investimentoAproximado,
+  //       tempoInvestimento: tempoInvestimento
+  //      });
+  //      resultModal.onDidDismiss(data => {
+  //     //console.log(data);
+  //   });
+  //   resultModal.present();
+  // }
 
   ajudaMediaKw(): void {
     this.presentInfoModal("Média KWh", `${this.abvEstadoSelecionado}/consumo_medio.jpg`, "Informe neste campo a média de consumo dos últimos 12 meses. Esta informação pode ser verificada na sua fatura de energia. Conforme destacado na imagem.");
@@ -187,10 +229,11 @@ export class HomePage {
     }
 
     let valorWatt = this.calculaValorWatt(this.sistemaSolarComercial);
+    
     if (valorWatt == 0) return; //não deve continuar o cálculo
 
     this.investimentoAproximado = (this.sistemaSolarComercial * 1000) * valorWatt;
-
+    
     let totalGeralTarifa = this.calculaTotalGeralTarifa(mediaKw, valorTarifa, this.valorTarifaExcedente);
     
     //ENCONTRA TAXA MINIMA 
@@ -209,15 +252,14 @@ export class HomePage {
 
     this.investimentoAproximado = Math.round(this.investimentoAproximado);
 
+    this.economiaPeriodo = this.calculaEconomiaPeriodo(this.investimentoAproximado, totalGeralTarifa, valorTaxaMinima);
+
     this.exibeResultado = true;
-    
-
-
     //Abre modal para exibir os resultados
     //this.presentResultModal("Resultado", sistemaSolarComercial, numeroPaineis, `${areaNecessaria}m²`, `${Math.round(investimentoAproximado)}`, tempoInvestimento);
   }
 
-  teste(){
+  testee(){
     // var $doc = $('ion-content');
     // $doc.animate({
     //     scrollTop: top
@@ -269,24 +311,36 @@ export class HomePage {
   }
 
   /**
-   * Calcula o valor médio do retorno do investimento
+  * Calcula a economia gerada pela instalação do kit solar.
+  * Ex.: Seria gasto 30 mil em 25 anos, porém o kit solar custou apenas 10 mil reais.
+  *      Logo, a economia será de 20 mil reais. 
+  */
+  calculaEconomiaPeriodo(investimentoAproximado, totalGeralTarifa, valorTaxaMinima): number{
+    let mediaFaturaMesComInflacao = totalGeralTarifa - valorTaxaMinima;
+    let totalGastoEmEnergiaNoPeriodo = mediaFaturaMesComInflacao * 300; //300-> 25 anos
+    return totalGastoEmEnergiaNoPeriodo - investimentoAproximado; 
+  }
+
+  /**
+   * Calcula o valor médio do tempo de retorno do investimento
    */
   calculaTempoMedioRetornoInvestimento(investimentoAproximado, totalGeralTarifa, valorTaxaMinima): string {
     let invest = investimentoAproximado;
 		let mes = 0;
-		let mediaFaturaMesComInflacao = totalGeralTarifa - valorTaxaMinima;
+    let mediaFaturaMesComInflacao = totalGeralTarifa - valorTaxaMinima;
+
 		while(invest > 0){	
 			if (mes >= 12){
 				mediaFaturaMesComInflacao = mediaFaturaMesComInflacao * 1.008334;
 			}
       mes++;
 			invest = invest - mediaFaturaMesComInflacao;
-		} 
+    } 
      
     let tempoEmAnos = mes / 12;
     let decimalTempoEmAnos = tempoEmAnos - Math.floor(tempoEmAnos);
     let tempoInvestimento: string;
-    if (decimalTempoEmAnos > 1) { //pois pode ter numeros como 0.00005      
+    if (decimalTempoEmAnos > 1) { //pois pode ter numeros como 0.00005
       let textoTempoEmAnos = decimalTempoEmAnos.toString().substr(2,1);
       tempoInvestimento = `${tempoEmAnos - decimalTempoEmAnos} anos e ${textoTempoEmAnos} mêses.`;
     } else {
@@ -334,61 +388,61 @@ export class HomePage {
     */	
   calculaValorWatt(sistemaSolarComercial:number): number{
     let valorWatt = "5"; //default
-
+    
     if (sistemaSolarComercial > 75)
     {
       this.showAlert("Alerta", "Para sistemas em alta tensão e com uma maior demanda é necessário uma análise técnica para o dimensionamento do seu gerador solar. Entre em contato com a KS para uma avaliação gratuita.");
       return 0;
     }
-
+    
 		if (sistemaSolarComercial <= 5) {
-			valorWatt = this.valorKitService.listaValorKits.filter(x => x.$key == "ate5")[0].valor
+      valorWatt = this.valorKitService.listaValorKits.filter(x => x.$key == "ate5")[0].valor
 		}
 		else if (sistemaSolarComercial <= 10)	{
-			valorWatt = this.valorKitService.listaValorKits.filter(x => x.$key == "de5a10")[0].valor
+      valorWatt = this.valorKitService.listaValorKits.filter(x => x.$key == "de5a10")[0].valor
 		}
 		else if (sistemaSolarComercial <= 15)	{
-			valorWatt = this.valorKitService.listaValorKits.filter(x => x.$key == "de10a15")[0].valor
+      valorWatt = this.valorKitService.listaValorKits.filter(x => x.$key == "de10a15")[0].valor
 		}
 		else if (sistemaSolarComercial <= 20)	{
 			valorWatt = this.valorKitService.listaValorKits.filter(x => x.$key == "de15a20")[0].valor
 		}
 		else if (sistemaSolarComercial <= 25)	{
-			valorWatt = this.valorKitService.listaValorKits.filter(x => x.$key == "de20a25")[0].valor
+      valorWatt = this.valorKitService.listaValorKits.filter(x => x.$key == "de20a25")[0].valor
 		}
 		else if (sistemaSolarComercial <= 30)	{
-			valorWatt = this.valorKitService.listaValorKits.filter(x => x.$key == "de25a30")[0].valor
+      valorWatt = this.valorKitService.listaValorKits.filter(x => x.$key == "de25a30")[0].valor
 		}
 		else if (sistemaSolarComercial <= 35)	{
-			valorWatt = this.valorKitService.listaValorKits.filter(x => x.$key == "de30a35")[0].valor
+      valorWatt = this.valorKitService.listaValorKits.filter(x => x.$key == "de30a35")[0].valor
 		}
 		else if (sistemaSolarComercial <= 40)	{
-			valorWatt = this.valorKitService.listaValorKits.filter(x => x.$key == "de35a40")[0].valor
+      valorWatt = this.valorKitService.listaValorKits.filter(x => x.$key == "de35a40")[0].valor
 		}
 		else if (sistemaSolarComercial <= 45)	{
-			valorWatt = this.valorKitService.listaValorKits.filter(x => x.$key == "de40a45")[0].valor
+      valorWatt = this.valorKitService.listaValorKits.filter(x => x.$key == "de40a45")[0].valor
 		}
 		else if (sistemaSolarComercial <= 50)	{
-			valorWatt = this.valorKitService.listaValorKits.filter(x => x.$key == "de45a50")[0].valor
+      valorWatt = this.valorKitService.listaValorKits.filter(x => x.$key == "de45a50")[0].valor
 		}
 		else if (sistemaSolarComercial <= 55)	{
-			valorWatt = this.valorKitService.listaValorKits.filter(x => x.$key == "de50a55")[0].valor
+      valorWatt = this.valorKitService.listaValorKits.filter(x => x.$key == "de50a55")[0].valor
 		}
 		else if (sistemaSolarComercial <= 60)	{
-			valorWatt = this.valorKitService.listaValorKits.filter(x => x.$key == "de55a60")[0].valor
+      valorWatt = this.valorKitService.listaValorKits.filter(x => x.$key == "de55a60")[0].valor
 		}
 		else if (sistemaSolarComercial <= 65)	{
-			valorWatt = this.valorKitService.listaValorKits.filter(x => x.$key == "de60a65")[0].valor
+      valorWatt = this.valorKitService.listaValorKits.filter(x => x.$key == "de60a65")[0].valor
 		}
 		else if (sistemaSolarComercial <= 70)	{
-			valorWatt = this.valorKitService.listaValorKits.filter(x => x.$key == "de65a70")[0].valor
+      valorWatt = this.valorKitService.listaValorKits.filter(x => x.$key == "de65a70")[0].valor
 		}
 		else if (sistemaSolarComercial <= 75)	{
-			valorWatt = this.valorKitService.listaValorKits.filter(x => x.$key == "de70a75")[0].valor
+      valorWatt = this.valorKitService.listaValorKits.filter(x => x.$key == "de70a75")[0].valor
     }        
     return parseFloat(valorWatt);
   }
-
+  
   showAlert(title, subTitle) {
     let alert = this.alertCtrl.create({
       title: title,

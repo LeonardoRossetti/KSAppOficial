@@ -1,5 +1,5 @@
 import { Response } from '@angular/http';
-import { Observable } from 'rxjs';
+import { Observable } from 'rxjs/Observable';
 import { AngularFireList, AngularFireObject } from 'angularfire2/database';
 
 const extractError = (error: Response | any): string => {
@@ -13,7 +13,6 @@ const extractError = (error: Response | any): string => {
         errMsg = error.message ? error.message : error.toString();
     }
     console.error(errMsg);
-
     return errMsg;
 }
 

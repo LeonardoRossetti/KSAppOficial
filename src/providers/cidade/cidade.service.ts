@@ -1,12 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 
-import { Observable } from 'rxjs';
-//import { map } from 'rxjs/operators/map';
-
-//import { FirebaseApp } from "angularfire2";
-//import { AngularFireAuth } from "angularfire2/auth";
-import { AngularFireDatabase, AngularFireObject/*, AngularFireList*/ } from "angularfire2/database";
+import { Observable } from 'rxjs/Observable';
+import { AngularFireDatabase, AngularFireObject } from "angularfire2/database";
 
 import { BaseService } from "./../base.service";
 import { Cidade } from './../../models/cidades.models';
@@ -23,25 +19,12 @@ export class CidadeService extends BaseService {
   listaCidades: Cidade[];
 
   constructor(
-    //public afAuth: AngularFireAuth,
     public db: AngularFireDatabase,
-    //public firebaseApp: FirebaseApp,
     public http: Http,
     public loadingCtrl: LoadingController
   ) {
-    super();  
+    super();
   }
-
-  // private setCidades(uidToExclude: string): void {
-  //   this.cidades = this.mapListKeys<Cidade>(
-  //     this.db.list<Cidade>(`/cidades`, 
-  //       (ref: firebase.database.Reference) => ref.orderByChild('nome')
-  //     )
-  //   )
-  //   .map((cidades: Cidade[]) => {      
-  //     return cidades.filter((Cidade: Cidade) => Cidade.$key !== uidToExclude);
-  //   });
-  // }
 
   edit(Cidade: {radiacao: string}): Promise<void> {
     return this.currentCidade
@@ -64,12 +47,11 @@ export class CidadeService extends BaseService {
   }
 
   getAll(estado): Observable<Cidade[]> {
-
     let loading: Loading = this.showLoading();
 
     this.cidades = this.mapListKeys<Cidade>(
       this.db.list<Cidade>(`/cidades/${estado}`, 
-        (ref: firebase.database.Reference) => ref//.orderByChild('nome')
+        (ref: firebase.database.Reference) => ref
       )
     )
     .map((cidades: Cidade[]) => {
@@ -77,7 +59,7 @@ export class CidadeService extends BaseService {
       loading.dismiss();
       return cidades;
     });
-
+    
     return this.cidades;
   }
 
@@ -87,8 +69,6 @@ export class CidadeService extends BaseService {
     });
 
     loading.present();
-
     return loading;
   }
-
 }

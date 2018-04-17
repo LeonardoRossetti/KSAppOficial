@@ -3,17 +3,18 @@
   <custom-header title="Calculadora Solar"></custom-header>
 </ion-header>
 
-<ion-content padding>
-  <ion-list>
 
+<ion-content padding>
+  
   <div>
     <!-- Feito isso pq estava ficando carregando eternamente o loading do carregar valor kit se nao tivesse uma chamada
     pra ele na tela. Não sei ainda o pq isso acontece! -->
-    <ion-item style="visibility: hidden; position:absolute;" *ngFor="let kit of valorKit | async">
+   <ion-item style="visibility: hidden; position:absolute;" *ngFor="let kit of valorKit | async">
       <ion-label>{{kit.nome}}</ion-label>
     </ion-item>
   </div>
-      
+
+  <ion-list>      
     <ion-item class="itemSelect">
       <ion-label color="light">Estado</ion-label>
       <ion-select class="selector" [(ngModel)]="estadoSelecionado" (ionChange)="carregaCidades(mediaKw.value);" cancelText="Cancelar" okText="OK">
@@ -21,13 +22,26 @@
       </ion-select>
     </ion-item> 
     <br>
-    <ion-item class="itemSelect">
+    <ion-item class="itemSelect" style="visibility: hidden; position:absolute;">
       <ion-label color="light">Cidade</ion-label>
       <ion-select [(ngModel)]="cidadeSelecionada" (ionChange)="mudaCidadeSelecionada()" cancelText="Cancelar" okText="OK">
         <ion-option *ngFor="let cidade of cidades | async" value="{{cidade.$key}}">{{cidade.nome}}</ion-option>
       </ion-select>
     </ion-item>
 
+    <ion-item class="itemSelect">
+      <select-search 
+        [(ngModel)]="_cidadeSelecionada"
+        title="Cidade"
+        itemValueField="$key"
+        itemTextField="nome"
+        (click)="carregaCidadesArray()"
+        [items]="cidadesArray"
+        [canSearch]="true"
+        (onChange)="cidadeChange($event)">
+      </select-search>
+    </ion-item>
+  
     <table class="tabela">
       <tr>
         <td class="tabela_td">
@@ -99,7 +113,8 @@
     <label class="textoLabel">Número de painéis: </label> <label>{{numeroPaineis}}</label><hr>
     <label class="textoLabel">Área necessária: </label> <label>{{areaNecessaria}}m²</label><hr>
     <label class="textoLabel">Investimento aproximado: </label> <label>{{investimentoAproximado | moeda }}</label><hr>
-    <label class="textoLabel">Retorno do investimento: </label> <label>{{tempoInvestimento}}</label>
+    <label class="textoLabel">Retorno do investimento: </label> <label>{{tempoInvestimento}}</label><hr>
+    <label class="textoLabel">Economia em 25 anos: </label> <label>{{economiaPeriodo | moeda}}</label>
   </div>
   <br>
   <table class="tabela">
