@@ -1,4 +1,3 @@
-import { Estado } from './../models/estados.models';
 import { SelectSearchPage } from './../pages/select-search/select-search';
 import { SelectSearch } from './../components/select-search/select-search';
 import { BrowserModule } from '@angular/platform-browser';

@@ -185,10 +185,7 @@ export class HomePage {
     if (mediaKw == "" || validaMediakW <= 0) { mensagemErro += "<br> - Média KWh/mês"; }
     if (valorTarifa == "" || validaValorTarifa <= 0) { mensagemErro += "<br> - Valor tarifa"; }
     if (tipoRede == null) { mensagemErro += "<br> - Tipo da Rede"; }
-    if ((this.abvEstadoSelecionado == 'sc' && (validaMediakW > 150 && (this.valorTarifaExcedente == null || this.valorTarifaExcedente <= 0)))){
-      mensagemErro += "<br> - Valor tarifa excedente";
-    }
-
+    
     if (mensagemErro != "") {
       this.showAlert("Informe todos os campos:", mensagemErro);
       this.exibeResultado = false;
@@ -317,8 +314,46 @@ export class HomePage {
   */
   calculaEconomiaPeriodo(investimentoAproximado, totalGeralTarifa, valorTaxaMinima): number{
     let mediaFaturaMesComInflacao = totalGeralTarifa - valorTaxaMinima;
-    let totalGastoEmEnergiaNoPeriodo = mediaFaturaMesComInflacao * 300; //300-> 25 anos
-    return totalGastoEmEnergiaNoPeriodo - investimentoAproximado; 
+    let economia = 0;
+    let mes = 0; 
+    let cadaAno = 12;
+
+    let totalAno = 0;
+let ano = 0;
+    while(mes <= 300){ //25 anos
+			// if (mes >= 12){
+      //   mediaFaturaMesComInflacao *= 1.008334;
+			// }
+      mes++;
+      
+      if (cadaAno == 0){
+        ano++;
+        
+        //aplica a inflação uma vez ao ano
+        cadaAno = 12;
+        
+        /*if (mes > 12 || mes == 300)
+        economia += (totalAno * 1.0912);
+        else
+        economia += totalAno;
+        */
+        economia += totalAno;
+        //console.log("eco: "+economia);
+        console.log("Ano: "+ano + " - totalAno: "+totalAno);
+        console.log(economia);
+        
+        totalAno = 0;
+
+        mediaFaturaMesComInflacao *= 1.0912;
+      }
+      totalAno += mediaFaturaMesComInflacao;
+      cadaAno--;
+      //economia += mediaFaturaMesComInflacao;
+    
+      //console.log(`Mes: ${mes}  -  Economia:${totalAno}`);      
+    }
+
+    return economia - investimentoAproximado;
   }
 
   /**
@@ -331,11 +366,11 @@ export class HomePage {
 
 		while(invest > 0){	
 			if (mes >= 12){
-				mediaFaturaMesComInflacao = mediaFaturaMesComInflacao * 1.008334;
+				mediaFaturaMesComInflacao = mediaFaturaMesComInflacao * 1.00912;//1.008334;
 			}
       mes++;
 			invest = invest - mediaFaturaMesComInflacao;
-    } 
+    }
      
     let tempoEmAnos = mes / 12;
     let decimalTempoEmAnos = tempoEmAnos - Math.floor(tempoEmAnos);
