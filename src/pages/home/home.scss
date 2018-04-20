@@ -12,6 +12,9 @@ page-home {
         border: 1px white solid;
         font-size: 18px;
         color: $font_color;
+        border-radius: 2px;
+        border-top-right-radius: 15px;
+        border-bottom-left-radius: 15px;
     }
 
     #resultado h3{

@@ -193,10 +193,9 @@ export class HomePage {
     }
 
     let sistemaSolarIdeal = 0;
-	  
-    let monofasico = 30;//diminui 30 kw da media antes de calcular o sistemaSolarIdeal 
-	  let bifasico = 50;
-    let trifasico = 100;
+
+	  //diminui 30 kw da media antes de calcular o sistemaSolarIdeal 
+    let monofasico = 30, bifasico = 50, trifasico = 100;
     let potenciaPainel = 300; //valor fixo
     let tipoRedeValor = 0;
 
@@ -238,11 +237,11 @@ export class HomePage {
 
     switch(tipoRede) {
       case ("bifasico"):
-      valorTaxaMinima = valorTarifa * bifasico; break;
+        valorTaxaMinima = valorTarifa * bifasico; break;
       case ("trifasico"):
-      valorTaxaMinima = valorTarifa * trifasico; break;
+        valorTaxaMinima = valorTarifa * trifasico; break;
       default:
-      valorTaxaMinima = valorTarifa * monofasico; break;
+        valorTaxaMinima = valorTarifa * monofasico; break;
     }
 
     this.tempoInvestimento = this.calculaTempoMedioRetornoInvestimento(this.investimentoAproximado, totalGeralTarifa, valorTaxaMinima)
@@ -314,45 +313,19 @@ export class HomePage {
   */
   calculaEconomiaPeriodo(investimentoAproximado, totalGeralTarifa, valorTaxaMinima): number{
     let mediaFaturaMesComInflacao = totalGeralTarifa - valorTaxaMinima;
-    let economia = 0;
-    let mes = 0; 
-    let cadaAno = 12;
-
-    let totalAno = 0;
-let ano = 0;
+    let economia = 0, mes = 0, cadaAno = 12, totalAno = 0;
     while(mes <= 300){ //25 anos
-			// if (mes >= 12){
-      //   mediaFaturaMesComInflacao *= 1.008334;
-			// }
       mes++;
-      
       if (cadaAno == 0){
-        ano++;
-        
-        //aplica a inflação uma vez ao ano
         cadaAno = 12;
-        
-        /*if (mes > 12 || mes == 300)
-        economia += (totalAno * 1.0912);
-        else
         economia += totalAno;
-        */
-        economia += totalAno;
-        //console.log("eco: "+economia);
-        console.log("Ano: "+ano + " - totalAno: "+totalAno);
-        console.log(economia);
-        
         totalAno = 0;
-
+        //aplica a inflação uma vez ao ano
         mediaFaturaMesComInflacao *= 1.0912;
       }
       totalAno += mediaFaturaMesComInflacao;
       cadaAno--;
-      //economia += mediaFaturaMesComInflacao;
-    
-      //console.log(`Mes: ${mes}  -  Economia:${totalAno}`);      
     }
-
     return economia - investimentoAproximado;
   }
 
