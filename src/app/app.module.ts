@@ -1,5 +1,6 @@
 import { SelectSearchPage } from './../pages/select-search/select-search';
 import { SelectSearch } from './../components/select-search/select-search';
+import { SQLite } from '@ionic-native/sqlite';
 import { BrowserModule } from '@angular/platform-browser';
 import { Camera } from '@ionic-native/camera';
 import { EmailComposer } from '@ionic-native/email-composer';
@@ -26,6 +27,8 @@ import { ValorKitService } from './../providers/valorKit/valorKit.service';
 
 import { AngularFireModule, FirebaseAppConfig } from 'angularfire2';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
+import { SqliteHelperService } from '../providers/sqlite-helper/sqlite-helper.service';
+import { SqliteEstadoService } from '../providers/sqlite-estado/sqlite-estado.service';
 
 const firebaseAppConfig: FirebaseAppConfig = {
   apiKey: "AIzaSyDJk6rV_N4xq8cmFYov5xqalcv-RrOKkqQ",
@@ -75,10 +78,13 @@ const firebaseAppConfig: FirebaseAppConfig = {
     EmailComposer,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     SplashScreen,
+    SQLite,
     StatusBar,
     CidadeService,
     EstadoService,
-    ValorKitService
+    SqliteHelperService,
+    ValorKitService,
+    SqliteEstadoService
   ]
 })
 export class AppModule {}
