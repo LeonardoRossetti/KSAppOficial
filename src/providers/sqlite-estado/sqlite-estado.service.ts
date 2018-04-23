@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { SqliteHelperService } from '../sqlite-helper/sqlite-helper.service';
 import { SQLiteObject } from '@ionic-native/sqlite';
+import { Estado } from '../../models/estados.models';
 
 @Injectable()
 export class SqliteEstadoService {
@@ -21,8 +22,10 @@ export class SqliteEstadoService {
         .then((db:
         SQLiteObject) => {
           this.db = db;
-          this.db.executeSql(`CREATE TABLE IF NOT EXISTS estado(
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
+          this.db.executeSql(`CREATE TABLE IF NOT EXISTS __estado(
+            _id INTEGER PRIMARY KEY AUTOINCREMENT,
+            id TEXT,
+            key TEXT,
             nome TEXT,
             sigla TEXT)`,{})
 
@@ -36,5 +39,39 @@ export class SqliteEstadoService {
     
     return this.sqliteHelperService.getDb();
   }
+  
+  getAll(orderBy?: String): Promise<Estado[]>{
+    return this.getDb()
+      .then((db: SQLiteObject) => {
 
+        return this.db.executeSql(`SELECT * FROM __estado ORDER BY ${orderBy || 'DESC'}`, {})
+          .then(resultSet => {
+            
+            let list: Estado[] = [];
+
+            for(let i = 0; i < resultSet.rows.length; i++){
+              list.push(resultSet.rows.item(i));
+            }
+
+            return list;
+          })
+          .catch((error: Error) => {
+            let errorMsg: string = 'Error executing method getAll!' + error;
+            console.log(errorMsg);
+            return Promise.reject(errorMsg);
+          })
+      });
+  }
+
+  create(estado: Estado): Promise<Estado>{
+    return this.db.executeSql('INSERT INTO __estado (id, key, nome, sigla) VALUES (?, ?)', [estado.id, estado.$key, estado.nome, estado.sigla])
+      .then(resultSet => {
+        estado.id = resultSet.insertId;
+        return estado;
+      }).catch((error: Error) => {
+        let errorMsg: string = `Error to create estado ${estado.nome}!` + error;
+        console.log(errorMsg);
+        return Promise.reject(errorMsg);
+    });
+  }
 }
