@@ -72,6 +72,16 @@ export class SqliteEstadoService {
         let errorMsg: string = `Error to create estado ${estado.nome}!` + error;
         console.log(errorMsg);
         return Promise.reject(errorMsg);
-    });
+      });
+  }
+
+  update(estado: Estado): Promise<boolean>{
+    return this.db.executeSql('UPDATE __estado SET id=?, key=?, nome=?, sigla=? WHERE key=?', [estado.id, estado.$key, estado.nome, estado.sigla, estado.$key])
+      .then(resultSet => resultSet.rowsAffected >= 0)
+      .catch((error: Error) => {
+        let errorMsg: string = `Error to update estado ${estado.nome}!` + error;
+        console.log(errorMsg);
+        return Promise.reject(errorMsg);
+      });
   }
 }
