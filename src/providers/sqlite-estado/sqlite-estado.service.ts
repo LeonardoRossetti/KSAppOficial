@@ -84,4 +84,36 @@ export class SqliteEstadoService {
         return Promise.reject(errorMsg);
       });
   }
+
+  delete(id: number): Promise<boolean>{
+    return this.db.executeSql('DELETE __estado WHERE key=?', [id])
+      .then(resultSet => resultSet.rowsAffected > 0)
+      .catch((error: Error) => {
+        let errorMsg: string = `Error deleting estado with key ${id}!` + error;
+        console.log(errorMsg);
+        return Promise.reject(errorMsg);
+      });
+  }
+    
+  getById(key: number): Promise<Estado>{
+    return this.db.executeSql('SELECT * FROM estado where key=?', [key])
+    .then(resultSet => resultSet.rows.item(0))
+    .catch((error: Error) => {
+      let errorMsg: string = `Error fetching estado with key ${key}!` + error;
+      console.log(errorMsg);
+      return Promise.reject(errorMsg);
+    });
+  }
+
+  getExistsId(key: number): Promise<boolean>{
+    return this.db.executeSql('SELECT * FROM estado where key=?', [key])
+    .then(resultSet => resultSet.rows > 0)
+    .catch((error: Error) => {
+      let errorMsg: string = `Error fetching estado with key ${key}!` + error;
+      console.log(errorMsg);
+      return Promise.reject(errorMsg);
+    });
+  }
+
+
 }
