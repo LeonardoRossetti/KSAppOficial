@@ -46,6 +46,14 @@ export class CidadeService extends BaseService {
     return this.db.object<Cidade>(`/cidades/${estado}/${cidade}`);
   }
 
+  getAllCidades(estado): Observable<Cidade[]> { 
+    return this.mapListKeys<Cidade>(
+      this.db.list<Cidade>(`/cidades/${estado}`, 
+        (ref: firebase.database.Reference) => ref
+      )
+    );
+  }
+
   getAll(estado): Observable<Cidade[]> {
     let loading: Loading = this.showLoading();
 

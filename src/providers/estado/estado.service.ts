@@ -10,6 +10,7 @@ import { Estado } from '../../models/estados.models';
 import * as firebase from 'firebase/app';
 import 'firebase/storage';
 import { Loading, LoadingController } from 'ionic-angular';
+import { SqliteEstadoService } from '../sqlite-estado/sqlite-estado.service';
 
 @Injectable()
 export class EstadoService extends BaseService {
@@ -18,16 +19,27 @@ export class EstadoService extends BaseService {
   currentEstado: AngularFireObject<Estado>;
   estadosArray: Estado[];
 
+  
+
   constructor(
     public db: AngularFireDatabase,
     public http: Http,
-    public loadingCtrl: LoadingController
+    public loadingCtrl: LoadingController,
+    public sqliteEstadoService: SqliteEstadoService,
   ) {
     super();  
   }
 
   get(estadoId: string): AngularFireObject<Estado> {
     return this.db.object<Estado>(`/estados/${estadoId}`);
+  }
+
+  getAllEstados(): Observable<Estado[]> { 
+    return this.mapListKeys<Estado>(
+      this.db.list<Estado>(`/estados`, 
+        (ref: firebase.database.Reference) => ref
+      )
+    );
   }
 
   getAll(): Observable<Estado[]> {

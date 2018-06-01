@@ -5,35 +5,20 @@
 
 
 <ion-content padding>
-  
-  <div>
-    <!-- Feito isso pq estava ficando carregando eternamente o loading do carregar valor kit se nao tivesse uma chamada
-    pra ele na tela. Não sei ainda o pq isso acontece! -->
-   <ion-item style="visibility: hidden; position:absolute;" *ngFor="let kit of valorKit | async">
-      <ion-label>{{kit.nome}}</ion-label>
-    </ion-item>
-  </div>
-
   <ion-list>      
     <ion-item class="itemSelect">
       <ion-label color="light">Estado</ion-label>
       <ion-select class="selector" [(ngModel)]="estadoSelecionado" (ionChange)="carregaCidades(mediaKw.value);" cancelText="Cancelar" okText="OK">
-        <ion-option  class="option" *ngFor="let estado of estados | async" value="{{estado.$key}}">{{estado.nome}}</ion-option>
+        <ion-option  class="option" *ngFor="let estado of _estados" value="{{estado.id}}">{{estado.nome}}</ion-option>
       </ion-select>
     </ion-item> 
     <br>
-    <ion-item class="itemSelect" style="visibility: hidden; position:absolute;">
-      <ion-label color="light">Cidade</ion-label>
-      <ion-select [(ngModel)]="cidadeSelecionada" (ionChange)="mudaCidadeSelecionada()" cancelText="Cancelar" okText="OK">
-        <ion-option *ngFor="let cidade of cidades | async" value="{{cidade.$key}}">{{cidade.nome}}</ion-option>
-      </ion-select>
-    </ion-item>
-
+  
     <ion-item class="itemSelect">
       <select-search 
         [(ngModel)]="_cidadeSelecionada"
         title="Cidade"
-        itemValueField="$key"
+        itemValueField="id"
         itemTextField="nome"
         (click)="carregaCidadesArray()"
         [items]="cidadesArray"

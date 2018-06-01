@@ -4,7 +4,8 @@ export class Cidade {
 
     constructor(
         public nome: string,
-        public radiacao: string
+        public radiacao: string,
+        public id?: string
     ) {}
 
 }

@@ -26,6 +26,7 @@ export class SelectSearchPage {
  
         if (this.selectComponent.value) {
             if (this.selectComponent.multiple) {
+                
                 this.selectComponent.value.forEach(item => {
                     this.selectedItems.push(item);
                 });

@@ -3,12 +3,16 @@
  * more info on how to use sw-toolbox to custom configure your service worker.
  */
 
-
 'use strict';
 importScripts('./build/sw-toolbox.js');
 
+const CACHE_APP_SHELL = 'task-cache-app-shell';
+const CACHE_APP_DATA = 'task-cache-app-data';
+
+self.toolbox.options.debug = true; //assim, vai jogar alguns logs no console
+
 self.toolbox.options.cache = {
-  name: 'ionic-cache'
+  name: CACHE_APP_SHELL
 };
 
 // pre-cache our key assets

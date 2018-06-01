@@ -2,14 +2,13 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { SqliteHelperService } from '../sqlite-helper/sqlite-helper.service';
 import { SQLiteObject } from '@ionic-native/sqlite';
-import { Estado } from '../../models/estados.models';
+import { ValorKit } from '../../models/ValorKit.models';
 
 @Injectable()
-export class SqliteEstadoService {
+export class SqliteValorKitService {
   private db: SQLiteObject;
   private isFirstCall: boolean = true;
-  //data: any;
-  
+
   constructor(
     public http: HttpClient,
     public sqliteHelperService: SqliteHelperService
@@ -21,15 +20,14 @@ export class SqliteEstadoService {
       return this.sqliteHelperService.getDb('ks.db')
         .then((db: SQLiteObject) => {
           this.db = db;
-          this.db.executeSql(`CREATE TABLE IF NOT EXISTS __estado(
+          this.db.executeSql(`CREATE TABLE IF NOT EXISTS __valorKit(
             _id INTEGER PRIMARY KEY AUTOINCREMENT,
-            id TEXT,
             key TEXT,
             nome TEXT,
-            sigla TEXT)`,{})
-          .then(success => console.log('Estado table created successfully!',success))      
+            valor TEXT)`,{})
+          .then(success => console.log('ValorKit table created successfully!',success))      
           .catch((error: Error) =>
-            console.log('Error creating estado table!', error
+            console.log('Error creating ValorKit table!', error
           ));
         return this.db;  
       });
@@ -38,81 +36,78 @@ export class SqliteEstadoService {
     return this.sqliteHelperService.getDb();
   }
   
-  getAll(): Promise<Estado[]>{
-    console.log('busca estadosss');
-    
+  getAll(): Promise<ValorKit[]>{
     return this.getDb()
       .then((db: SQLiteObject) => {
-        return this.db.executeSql(`SELECT * FROM __estado`, {})
-          .then(resultSet => {
-            let list: Estado[] = [];
+        return this.db.executeSql(`SELECT * FROM __valorKit`, {})
+          .then(resultSet => {            
+            let list: ValorKit[] = [];
 
             for(let i = 0; i < resultSet.rows.length; i++){
-              let estado = new Estado(resultSet.rows.item(i).key, resultSet.rows.item(i).nome, resultSet.rows.item(i).sigla)
-              list.push(estado);
+              let valorKit = new ValorKit(resultSet.rows.item(i).valor, resultSet.rows.item(i).nome);
+              valorKit.$key = resultSet.rows.item(i).key;
+              list.push(valorKit);
             }
 
             return list;
           })
           .catch((error: Error) => {
-            let errorMsg: string = 'Error executing method getAll Estados!' + error.message + " Stack: "+ error.stack;
-
+            let errorMsg: string = 'Error executing method getAll ValorKits!' + error;
             console.log(errorMsg);
             return Promise.reject(errorMsg);
           })
       });
   }
 
-  create(estado: Estado): Promise<Estado>{
+  create(valorKit: ValorKit): Promise<ValorKit>{
     return this.getDb()
     .then((db: SQLiteObject) => {    
-        return this.db.executeSql('INSERT INTO __estado (id, key, nome, sigla) VALUES (?, ?, ?, ?)', [estado.id, estado.$key, estado.nome, estado.sigla])
+        return this.db.executeSql('INSERT INTO __valorKit (key, nome, valor) VALUES (?, ?, ?)', [valorKit.$key, valorKit.nome, valorKit.valor])
           .then(resultSet => {            
-            estado.id = resultSet.insertId;
-            return estado;
+            return valorKit;
           }).catch((error: Error) => {
-            let errorMsg: string = `Error to create estado ${estado.nome}!` + error;
+            let errorMsg: string = `Error to create ValorKit ${valorKit.nome}!` + error;
             console.log(errorMsg);
             return Promise.reject(errorMsg);
           });
     });
   }
 
-  update(estado: Estado): Promise<boolean>{
-    return this.db.executeSql('UPDATE __estado SET id=?, key=?, nome=?, sigla=? WHERE key=?', [estado.id, estado.$key, estado.nome, estado.sigla, estado.$key])
+  update(valorKit: ValorKit): Promise<boolean>{
+    return this.db.executeSql('UPDATE __valorKit SET valor=? WHERE key=?', [valorKit.nome, valorKit.$key])
       .then(resultSet => resultSet.rowsAffected >= 0)
       .catch((error: Error) => {
-        let errorMsg: string = `Error to update estado ${estado.nome}!` + error;
+        let errorMsg: string = `Error to update ValorKit ${valorKit.nome}!` + error;
         console.log(errorMsg);
         return Promise.reject(errorMsg);
       });
   }
 
   delete(id: number): Promise<boolean>{
-    return this.db.executeSql('DELETE __estado WHERE key=?', [id])
+    return this.db.executeSql('DELETE __valorKit WHERE key=?', [id])
       .then(resultSet => resultSet.rowsAffected > 0)
       .catch((error: Error) => {
-        let errorMsg: string = `Error deleting estado with key ${id}!` + error;
+        let errorMsg: string = `Error deleting ValorKit with key ${id}!` + error;
         console.log(errorMsg);
         return Promise.reject(errorMsg);
       });
   }
     
-  getById(key: number): Promise<Estado>{
-    return this.db.executeSql('SELECT * FROM estado where key=?', [key])
+  getById(key: number): Promise<ValorKit>{
+    return this.db.executeSql('SELECT * FROM ValorKit where key=?', [key])
     .then(resultSet => resultSet.rows.item(0))
     .catch((error: Error) => {
-      let errorMsg: string = `Error fetching estado with key ${key}!` + error;
+      let errorMsg: string = `Error fetching ValorKit with key ${key}!` + error;
       console.log(errorMsg);
       return Promise.reject(errorMsg);
     });
   }
 
   getExistsId(key: number): Promise<boolean>{
-    return this.db.executeSql('SELECT * FROM estado where key=?', [key])
+    return this.db.executeSql('SELECT * FROM ValorKit where key=?', [key])
     .then(resultSet => resultSet.rows > 0)
     .catch((error: Error) => {
-      let errorMsg: string = `Error fetching estado with key ${key}!` + error;
+      let errorMsg: string = `Error fetching ValorKit with key ${key}!` + error;
       console.log(errorMsg);
       return Promise.reject(errorMsg);
     });

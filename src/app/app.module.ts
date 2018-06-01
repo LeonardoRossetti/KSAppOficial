@@ -1,3 +1,4 @@
+import { SqliteCidadeService } from './../providers/sqlite-cidade/sqlite-cidade.service';
 import { SelectSearchPage } from './../pages/select-search/select-search';
 import { SelectSearch } from './../components/select-search/select-search';
 import { SQLite } from '@ionic-native/sqlite';
@@ -8,6 +9,7 @@ import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { HttpClientModule } from '@angular/common/http';
 import { HttpModule } from '@angular/http';
 import { NgModule, ErrorHandler } from '@angular/core';
+import { Network } from '@ionic-native/network';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
@@ -22,6 +24,7 @@ import { ResultComponent } from '../components/result/result';
 import { TabsPage } from '../pages/tabs/tabs';
 
 import { CidadeService } from '../providers/cidade/cidade.service';
+import { ControleService } from '../providers/controleAlteracoes/controle.service';
 import { EstadoService } from '../providers/estado/estado.service';
 import { ValorKitService } from './../providers/valorKit/valorKit.service';
 
@@ -29,6 +32,8 @@ import { AngularFireModule, FirebaseAppConfig } from 'angularfire2';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { SqliteHelperService } from '../providers/sqlite-helper/sqlite-helper.service';
 import { SqliteEstadoService } from '../providers/sqlite-estado/sqlite-estado.service';
+import { SqliteControleAlteracoesService } from '../providers/sqlite-controleAlteracoes/sqlite-controleAlteracoes';
+import { SqliteValorKitService } from '../providers/sqlite-valorKit/sqlite-valorkit.service';
 
 const firebaseAppConfig: FirebaseAppConfig = {
   apiKey: "AIzaSyDJk6rV_N4xq8cmFYov5xqalcv-RrOKkqQ",
@@ -77,14 +82,19 @@ const firebaseAppConfig: FirebaseAppConfig = {
     Camera,
     EmailComposer,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
+    Network,
     SplashScreen,
     SQLite,
     StatusBar,
     CidadeService,
+    ControleService,
     EstadoService,
+    SqliteControleAlteracoesService,
+    SqliteCidadeService,
+    SqliteEstadoService,
     SqliteHelperService,
-    ValorKitService,
-    SqliteEstadoService
+    SqliteValorKitService,
+    ValorKitService
   ]
 })
 export class AppModule {}

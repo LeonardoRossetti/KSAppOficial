@@ -25,6 +25,14 @@ export class ValorKitService extends BaseService {
     super();  
   }
 
+  getAllValorKit(): Observable<ValorKit[]> { 
+    return this.mapListKeys<ValorKit>(
+      this.db.list<ValorKit>(`/valorKits`, 
+        (ref: firebase.database.Reference) => ref
+      )
+    );
+  }
+
   getAll(): Observable<ValorKit[]> {
     let loading: Loading = this.showLoading();
     

@@ -1,7 +1,9 @@
+import { Network } from '@ionic-native/network';
+import { ControleService } from './../../providers/controleAlteracoes/controle.service';
 import { AboutPage } from './../about/about';
 import { ContactPage } from './../contact/contact';
 import { Component } from '@angular/core';
-import { NavController, AlertController, ModalController, LoadingController, Loading } from 'ionic-angular';
+import { NavController, AlertController, ModalController, LoadingController, Loading, Platform } from 'ionic-angular';
 
 import { InfoComponent } from './../../components/info/info';
 
@@ -14,6 +16,11 @@ import { AngularFireDatabase } from 'angularfire2/database';
 import { ValorKit } from '../../models/valorkit.models';
 import { ValorKitService } from '../../providers/valorKit/valorKit.service';
 import { SelectSearch } from '../../components/select-search/select-search';
+import { SqliteControleAlteracoesService } from '../../providers/sqlite-controleAlteracoes/sqlite-controleAlteracoes';
+import { SqliteEstadoService } from '../../providers/sqlite-estado/sqlite-estado.service';
+import { ControleAlteracao } from '../../models/controleAlteracao.models';
+import { SqliteValorKitService } from '../../providers/sqlite-valorKit/sqlite-valorkit.service';
+import { SqliteCidadeService } from '../../providers/sqlite-cidade/sqlite-cidade.service';
 
 //import * as $ from 'jquery';
 
@@ -24,6 +31,8 @@ import { SelectSearch } from '../../components/select-search/select-search';
 export class HomePage {
   cidadesArray: Cidade[];
   _cidadeSelecionada: Cidade;
+
+  estadosArray: Estado[] = [];
 
   existeTarifaExcedente: boolean = false;  
   exibeResultado: boolean = false;
@@ -37,42 +46,129 @@ export class HomePage {
 
   abvEstadoSelecionado: string = 'sc';
   estados: Observable<Estado[]>;
+  _estados: Estado[];
   estadoSelecionado: string;
   cidades: Observable<Cidade[]>;
+  _cidades: Cidade[];
   cidadeSelecionada: string;
   currentCidade: Cidade;
   valorKit: Observable<ValorKit[]>;
+  _valorKit: ValorKit[];
   currentValorKit: ValorKit; 
   radiacaoCidade: number = 4.42; //valor default
+
 
   constructor(
     public alertCtrl: AlertController,
     public db: AngularFireDatabase,
     public cidadeService: CidadeService,
+    public controleService: ControleService,
     public estadoService: EstadoService,
     public loadingCtrl: LoadingController,
     public modalCtrl: ModalController,
     public navCtrl: NavController,
+    public network: Network,
+    private platform: Platform,
+    public sqliteCidadeService: SqliteCidadeService,
+    public sqliteControleService: SqliteControleAlteracoesService,
+    public sqliteEstadoService: SqliteEstadoService, 
+    public sqliteValorKitService: SqliteValorKitService,
     public valorKitService: ValorKitService
   ) { }
     
   ionViewDidLoad() {
-    this.estados = this.estadoService.getAll();
-    this.valorKit = this.valorKitService.getAll();
+
+    /**
+     * consultar a data da ultima altera��o local. Caso ela n�o exista nem adianta buscar a data 
+     * do servidor pra tentar comparar
+     * 
+     * gerar consulta para ver se os dados est�o atualizados. Para isso,
+     * ser� necess�rio verificar o campo data_ultima_alteracao
+     * 
+     * se a data ultima alteracao for maior do que a data ultima alteracao local
+     * deve-se atualizar os dados
+     * 
+     * senao, apenas apresenta os dados locais em tela 
+     * 
+     * 
+     * Testar:
+     * abrindo o app sem rede (com dados locais e sem)
+     */
+
+    // this.estados = this.estadoService.getAll();
+    // this.valorKit = this.valorKitService.getAll();
+
+    console.log('abriu!');
+    
+
+    this.network.onDisconnect().subscribe(() => {
+
+      // mensagem no console que nao possui conexao.
+      console.log('Nao possui conexao com internet :-(');
+
+      this.sqliteControleService.getAll().then((data) => {
+        console.log('data local sem conexao::: '+ data.dataUltimaAlteracao);
+        
+        if (data.dataUltimaAlteracao == "0"){
+          //nao possui dados locais criados
+          this.showLoading("É necessário acesso a internet para criar os dados localmente!");
+        } else {
+          this.sqliteEstadoService.getAll()
+          .then((estados: Estado[]) => { 
+            console.log("Carergou estados na tela>>>>"+estados[0].nome);
+            this._estados = estados;
+          }).catch((err)=> {
+            console.log("Erro ao buscar os Estados em tela! "+err);
+          });
+    
+          this.sqliteValorKitService.getAll()
+          .then((valorKits: ValorKit[])=> {
+            console.log('Carregou os valorKits em tela!');
+            this._valorKit = valorKits;
+          }).catch((err)=> {
+            console.log("Erro ao buscar os valorKit em tela! "+err);
+          });
+        }
+      });
+   });
+
+   console.log('possui conexao');
+    
+    this.controleService.AtualizaDadosLocais()
+    .then(()=>{ 
+      let loading: Loading = this.showLoading('Ajustando tabelas...');
+      this.sqliteEstadoService.getAll()
+      .then((estados: Estado[]) => { 
+        console.log("Carergou estados na tela>>>>"+estados[0].nome);
+        this._estados = estados;
+      }).catch((err)=> {
+        console.log("Erro ao buscar os Estados em tela! "+err);
+      });
+
+      this.sqliteValorKitService.getAll()
+      .then((valorKits: ValorKit[])=> {
+        console.log('Carregou os valorKits em tela!');
+        this._valorKit = valorKits;
+      }).catch((err)=> {
+        console.log("Erro ao buscar os valorKit em tela! "+err);
+      });
+      loading.dismiss();
+    }).catch((err)=> {
+      console.log("Erro ao atualizar dados locais! "+err);
+    });   
   }
 
-  verificaSeExisteTarifaExcedente(mediaKw): void{
-    if (this.abvEstadoSelecionado == 'sc' && mediaKw > 150){
+  verificaSeExisteTarifaExcedente(mediaKw): void {
+    if (this.abvEstadoSelecionado == 'sc' && mediaKw > 150) {
       this.existeTarifaExcedente = true;
-
-    } else{
+    } else {
       this.existeTarifaExcedente = false;
     }
   }
 
-  private showLoading(): Loading {
+  private showLoading(message): Loading {
     let loading: Loading = this.loadingCtrl.create({
-      content: 'Carregando cidades...'
+      content: message
     });
 
     loading.present();
@@ -83,11 +179,13 @@ export class HomePage {
    * Click do componente de cidades
    */
   carregaCidadesArray() {
-    let loading: Loading = this.showLoading();
+    let loading: Loading = this.showLoading('Carregando cidades...');
 
-    if (this.cidadeService.listaCidades != null){
-      this.cidadesArray = this.cidadeService.listaCidades;     
-    }
+    // if (this.cidadeService.listaCidades != null){
+    //   this.cidadesArray = this.cidadeService.listaCidades;     
+    // }
+
+    this.cidadesArray = this._cidades;
 
     setTimeout(()=>{
       loading.dismiss();
@@ -95,36 +193,43 @@ export class HomePage {
   }
 
   carregaCidades(mediaKw): void {
-    this.cidades = this.cidadeService.getAll(this.estadoSelecionado);
+    this.sqliteCidadeService.getAll(this.estadoSelecionado)
+    .then((cidades) => { 
+      this._cidades = cidades;
+    })
+    .catch((err)=> {
+      console.log("Erro na execucao! Parar execucao e dar mensagem ao usuario."+err);
+    });
+    
+    //this.cidades = this.cidadeService.getAll(this.estadoSelecionado);
     this.abvEstadoSelecionado = this.estadoSelecionado.toLowerCase();
     this.cidadeSelecionada = null;
     this.currentCidade = null;
     this._cidadeSelecionada = null;
     this.verificaSeExisteTarifaExcedente(mediaKw);
 
-    //até passar a usar a base de dados local é necessário deixar esse load para impedir o usuario
+    //at� passar a usar a base de dados local � necess�rio deixar esse load para impedir o usuario
     //de abrir o modal de ciades sem nenhuma cidade carregada
-    let loading: Loading = this.showLoading();
+    let loading: Loading = this.showLoading('Carregando cidades...');
     setTimeout(()=>{
       loading.dismiss();
     },1900);
   }
 
-  cidadeChange(event: { component: SelectSearch, value: any }) {   
+  cidadeChange(event: { component: SelectSearch, value: any }) {    
     this.currentCidade = new Cidade(event.value.nome, event.value.radiacao);
-    this.cidadeSelecionada = event.value.$key;
+    this.cidadeSelecionada = event.value.id;
     this.radiacaoCidade = parseFloat(this.currentCidade.radiacao);
   }
 
-
-  mudaCidadeSelecionada(): void { 
+  mudaCidadeSelecionada(): void {
     //ao mudar o estado selecionado nao existe cidade selecionada
     //dava erro ao tentar ler a propriedade radiacao sem ter cidade selecionada  
     if (this.cidadeSelecionada == null) {
       return;
     }
 
-    this.currentCidade = this.cidadeService.listaCidades.filter(x=> x.$key == this.cidadeSelecionada)[0];
+    this.currentCidade = this._cidades.filter(x=> x.$key == this.cidadeSelecionada)[0];
     this.radiacaoCidade = parseFloat(this.currentCidade.radiacao);    
   }
 
@@ -226,7 +331,7 @@ export class HomePage {
 
     let valorWatt = this.calculaValorWatt(this.sistemaSolarComercial);
     
-    if (valorWatt == 0) return; //não deve continuar o cálculo
+    if (valorWatt == 0) return; //n�o deve continuar o c�lculo
 
     this.investimentoAproximado = (this.sistemaSolarComercial * 1000) * valorWatt;
     
@@ -307,9 +412,9 @@ export class HomePage {
   }
 
   /**
-  * Calcula a economia gerada pela instalação do kit solar.
-  * Ex.: Seria gasto 30 mil em 25 anos, porém o kit solar custou apenas 10 mil reais.
-  *      Logo, a economia será de 20 mil reais. 
+  * Calcula a economia gerada pela instalacao do kit solar.
+  * Ex.: Seria gasto 30 mil em 25 anos, porem o kit solar custou apenas 10 mil reais.
+  *      Logo, a economia sera de 20 mil reais. 
   */
   calculaEconomiaPeriodo(investimentoAproximado, totalGeralTarifa, valorTaxaMinima): number{
     let mediaFaturaMesComInflacao = totalGeralTarifa - valorTaxaMinima;
@@ -320,7 +425,7 @@ export class HomePage {
         cadaAno = 12;
         economia += totalAno;
         totalAno = 0;
-        //aplica a inflação uma vez ao ano
+        //aplica a inflacao uma vez ao ano
         mediaFaturaMesComInflacao *= 1.0912;
       }
       totalAno += mediaFaturaMesComInflacao;
@@ -404,49 +509,49 @@ export class HomePage {
     }
     
 		if (sistemaSolarComercial <= 5) {
-      valorWatt = this.valorKitService.listaValorKits.filter(x => x.$key == "ate5")[0].valor
+      valorWatt = this._valorKit.filter(x => x.$key == "ate5")[0].valor
 		}
 		else if (sistemaSolarComercial <= 10)	{
-      valorWatt = this.valorKitService.listaValorKits.filter(x => x.$key == "de5a10")[0].valor
+      valorWatt = this._valorKit.filter(x => x.$key == "de5a10")[0].valor
 		}
 		else if (sistemaSolarComercial <= 15)	{
-      valorWatt = this.valorKitService.listaValorKits.filter(x => x.$key == "de10a15")[0].valor
+      valorWatt = this._valorKit.filter(x => x.$key == "de10a15")[0].valor
 		}
 		else if (sistemaSolarComercial <= 20)	{
-			valorWatt = this.valorKitService.listaValorKits.filter(x => x.$key == "de15a20")[0].valor
+			valorWatt = this._valorKit.filter(x => x.$key == "de15a20")[0].valor
 		}
 		else if (sistemaSolarComercial <= 25)	{
-      valorWatt = this.valorKitService.listaValorKits.filter(x => x.$key == "de20a25")[0].valor
+      valorWatt = this._valorKit.filter(x => x.$key == "de20a25")[0].valor
 		}
 		else if (sistemaSolarComercial <= 30)	{
-      valorWatt = this.valorKitService.listaValorKits.filter(x => x.$key == "de25a30")[0].valor
+      valorWatt = this._valorKit.filter(x => x.$key == "de25a30")[0].valor
 		}
 		else if (sistemaSolarComercial <= 35)	{
-      valorWatt = this.valorKitService.listaValorKits.filter(x => x.$key == "de30a35")[0].valor
+      valorWatt = this._valorKit.filter(x => x.$key == "de30a35")[0].valor
 		}
 		else if (sistemaSolarComercial <= 40)	{
-      valorWatt = this.valorKitService.listaValorKits.filter(x => x.$key == "de35a40")[0].valor
+      valorWatt = this._valorKit.filter(x => x.$key == "de35a40")[0].valor
 		}
 		else if (sistemaSolarComercial <= 45)	{
-      valorWatt = this.valorKitService.listaValorKits.filter(x => x.$key == "de40a45")[0].valor
+      valorWatt = this._valorKit.filter(x => x.$key == "de40a45")[0].valor
 		}
 		else if (sistemaSolarComercial <= 50)	{
-      valorWatt = this.valorKitService.listaValorKits.filter(x => x.$key == "de45a50")[0].valor
+      valorWatt = this._valorKit.filter(x => x.$key == "de45a50")[0].valor
 		}
 		else if (sistemaSolarComercial <= 55)	{
-      valorWatt = this.valorKitService.listaValorKits.filter(x => x.$key == "de50a55")[0].valor
+      valorWatt = this._valorKit.filter(x => x.$key == "de50a55")[0].valor
 		}
 		else if (sistemaSolarComercial <= 60)	{
-      valorWatt = this.valorKitService.listaValorKits.filter(x => x.$key == "de55a60")[0].valor
+      valorWatt = this._valorKit.filter(x => x.$key == "de55a60")[0].valor
 		}
 		else if (sistemaSolarComercial <= 65)	{
-      valorWatt = this.valorKitService.listaValorKits.filter(x => x.$key == "de60a65")[0].valor
+      valorWatt = this._valorKit.filter(x => x.$key == "de60a65")[0].valor
 		}
 		else if (sistemaSolarComercial <= 70)	{
-      valorWatt = this.valorKitService.listaValorKits.filter(x => x.$key == "de65a70")[0].valor
+      valorWatt = this._valorKit.filter(x => x.$key == "de65a70")[0].valor
 		}
 		else if (sistemaSolarComercial <= 75)	{
-      valorWatt = this.valorKitService.listaValorKits.filter(x => x.$key == "de70a75")[0].valor
+      valorWatt = this._valorKit.filter(x => x.$key == "de70a75")[0].valor
     }        
     return parseFloat(valorWatt);
   }
